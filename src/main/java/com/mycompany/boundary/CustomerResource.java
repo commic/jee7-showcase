@@ -5,11 +5,13 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.mail.MessagingException;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import com.mycompany.control.CustomerService;
+import com.mycompany.control.ProductService;
 import com.mycompany.control.ValidationException;
 import com.mycompany.entity.Customer;
 
@@ -17,6 +19,9 @@ public class CustomerResource implements ICustomerResource {
 
 	@EJB
 	private CustomerService customerService;
+	
+	@EJB
+	private ProductService productService;
 
 	/*
 	 * (non-Javadoc)
@@ -108,6 +113,11 @@ public class CustomerResource implements ICustomerResource {
 	public Response sayHello() {
 		return Response.ok(new String[]{"Hello ", " world"}).build();
 	}
-	
+
+	@Override
+	public Response sendProductListToCustomer(Long customerId) throws MessagingException {
+		customerService.sendProductNewsLetterToCustomer(customerId, productService.findAllProducts());
+		return Response.ok("mail sent successfully").build();
+	}
 	
 }

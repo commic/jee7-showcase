@@ -1,6 +1,7 @@
 package com.mycompany.entity;
 
 import java.math.BigDecimal;
+import java.util.Arrays;
 
 import javax.persistence.Basic;
 import javax.persistence.Column;
@@ -75,6 +76,12 @@ public abstract class Product {
 
 	public void setId(long id) {
 		this.id = id;
+	}
+
+	@Override
+	public String toString() {
+		return String.format("Product [id=%s, name=%s, category=%s, price=%s]",
+									   id, 	  name,    category, 	price);
 	}
 	
 }

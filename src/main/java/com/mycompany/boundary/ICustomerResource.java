@@ -3,6 +3,7 @@ package com.mycompany.boundary;
 import java.net.URISyntaxException;
 
 import javax.ejb.Stateless;
+import javax.mail.MessagingException;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -49,6 +50,9 @@ import com.mycompany.entity.Customer;
 @Stateless
 public interface ICustomerResource {
 
+	public static final String CUSTOMER_ID_PLAIN = "customerId";
+	public static final String CUSTOMER_ID = "{" + CUSTOMER_ID_PLAIN + "}";
+	
 	/**
 	 * Diese Methode dient zum Speichern eines Kunden (C from CRUD).
 	 * HTTP 201 (welche die erfolgreiche Erstellung einer Resource repraesentiert) kann wie folgt zurueckgegeben werden:
@@ -80,9 +84,9 @@ public interface ICustomerResource {
 	 * @return HTTP Code 200 + aufgefundener Kunde oder 404 
 	 */
 	@GET
-	@Path("/{customerId}")
+	@Path("/" + CUSTOMER_ID)
 	@Produces(MediaType.APPLICATION_JSON)
-	Response findCustomerById(@PathParam(value = "customerId") String customerId);
+	Response findCustomerById(@PathParam(value = CUSTOMER_ID_PLAIN) String customerId);
 
 	/**
 	 * <p>Diese Methode dient dem Auffinden von Kunden, welchen einem oder mehreren Kriterien entsprechen.
@@ -131,7 +135,7 @@ public interface ICustomerResource {
 	 * @return HTTP Code 202
 	 */
 	@PUT
-	@Path("/{customerId}")
+	@Path("/" + CUSTOMER_ID)
 	Response updateCustomer(Customer customer);
 
 	/**
@@ -145,8 +149,8 @@ public interface ICustomerResource {
 	 * @return HTTP Code 200
 	 */
 	@DELETE
-	@Path("/{customerId}")
-	Response deleteCustomer(@PathParam("customerId") Long customerId);
+	@Path("/" + CUSTOMER_ID)
+	Response deleteCustomer(@PathParam(CUSTOMER_ID_PLAIN) Long customerId);
 	
 	/**
 	 * Einfache Testmethode um die Verfügbarkeit des Services zu überprüfen.
@@ -158,5 +162,8 @@ public interface ICustomerResource {
 	@Produces(MediaType.APPLICATION_JSON)
 	public abstract Response sayHello();
 	
-	
+	@GET
+	@Path("/mail/" + CUSTOMER_ID)
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response sendProductListToCustomer(@PathParam(CUSTOMER_ID_PLAIN) Long customerId) throws MessagingException;
 }

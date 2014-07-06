@@ -2,15 +2,25 @@ package com.mycompany.control;
 
 import java.util.List;
 
+import javax.annotation.Resource;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
+import javax.mail.Address;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.AddressException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import com.mycompany.entity.Customer;
+import com.mycompany.entity.Product;
 import com.mycompany.entity.QCustomer;
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.impl.JPAQuery;
@@ -21,6 +31,9 @@ public class CustomerService {
 
 	@PersistenceContext
 	private EntityManager entityManager;
+	
+	@Resource(mappedName="java:jboss/mail/Default")
+	private Session mailSession;
 	
 	// TODO: catch JPA validation exceptions and expose ValidationException 
 	public void saveCustomer(Customer customer) throws ValidationException {
@@ -107,6 +120,25 @@ public class CustomerService {
 		if (customer != null) {
 			entityManager.remove(customer);
 		}
+	}
+
+	public void sendProductNewsLetterToCustomer(Long customerId, List<? extends Product> products) throws MessagingException {
+		Customer targetCustomer = findCustomerById(customerId);
+		MimeMessage message = new MimeMessage(mailSession);
+		Address from = new InternetAddress("jee7@dev.commic.eu");
+		Address[] to = new InternetAddress[] {new InternetAddress(targetCustomer.getEmail()) };
+		message.setFrom(from);
+		message.setRecipients(Message.RecipientType.TO, to);
+		message.setSubject("Newsletter of our current products!");
+		message.setSentDate(new java.util.Date());
+		StringBuilder contentBuilder = new StringBuilder();
+		contentBuilder.append("Mail sent from JBoss AS 7");
+		for(Product pro : products){
+			contentBuilder.append(pro.toString());
+		}
+		message.setContent(contentBuilder.toString(),"text/plain");
+		Transport.send(message);
+		
 	}
 
 }
