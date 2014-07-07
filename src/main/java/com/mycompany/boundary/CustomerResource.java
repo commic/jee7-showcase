@@ -54,7 +54,7 @@ public class CustomerResource implements ICustomerResource {
 		try{
 			customerService.saveCustomer(customer);
 		}catch(ValidationException e) {
-			
+			e.printViolations();
 		}		
 		return Response.created(
 				new URI(uriInfo.getRequestUri() + "/" + customer.getId()))

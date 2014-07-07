@@ -11,6 +11,8 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 
 /**
  * Customer entity, representing a customer object that can be persisted to a
@@ -25,7 +27,10 @@ public class Customer {
   @Id
   @GeneratedValue(strategy=GenerationType.SEQUENCE)
   private Long id;
+  @NotNull(message="Der Vorname darf nicht leer sein")
+  @Size(min=3, message="Bitte min. 3 Buchstaben eingeben")
   private String firstName;
+  @NotNull(message="Der Nachname darf nicht leer sein")
   private String lastName;
   private String email;
   private String phone;
