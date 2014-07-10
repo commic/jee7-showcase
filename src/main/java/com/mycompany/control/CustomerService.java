@@ -42,7 +42,6 @@ public class CustomerService {
     @Inject
     private Validator validator;
 	
-	// TODO: catch JPA validation exceptions and expose ValidationException 
 	public void saveCustomer(Customer customer) throws ValidationException {
 		Set<ConstraintViolation<Customer>> violations = validator.validate(customer);
 		if(violations.size() == 0) {
@@ -97,10 +96,14 @@ public class CustomerService {
 		return entityManager.find(Customer.class, id);
 	}
 
-	// TODO: handle JPA ValidationExceptions
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void updateCustomer(Customer customer)  throws ValidationException {
-		entityManager.merge(customer);
+		Set<ConstraintViolation<Customer>> violations = validator.validate(customer);
+		if(violations.size() == 0) {
+			entityManager.merge(customer);	
+		}else{
+			throw new ValidationException(extractViolationMessages(violations));			
+		}
 	}
 
 	private String[] splitSearchString(String searchString) {

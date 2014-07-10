@@ -38,7 +38,10 @@
 					<td>{{ customer.createDate | date }}</td>
 					<td><a href="#/customer/edit/{{customer.id}}" title="edit" class="btn btn-xs btn-default"><i
 							class="glyphicon glyphicon-edit"></i></a> <a class="btn btn-xs btn-default" ng-click="deleteCustomer(customer.id)"
-						title="delete"><i class="glyphicon glyphicon-remove"></i></a></td>
+						title="delete"><i class="glyphicon glyphicon-remove"></i></a>
+						<a class="btn btn-xs btn-default" ng-click="sendMail(customer.id)"
+						title="sendMail"><i class="glyphicon glyphicon-briefcase"></i></a>
+						</td>
 				</tr>
 			</tbody>
 		</table>

@@ -12,7 +12,11 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
+
+import com.mycompany.entity.constraint.Email;
+import com.mycompany.entity.constraint.Phone;
 
 /**
  * Customer entity, representing a customer object that can be persisted to a
@@ -21,137 +25,145 @@ import javax.validation.constraints.Size;
  * 
  */
 @Entity
-@Inheritance(strategy=InheritanceType.SINGLE_TABLE)
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Customer {
 
-  @Id
-  @GeneratedValue(strategy=GenerationType.SEQUENCE)
-  private Long id;
-  @NotNull(message="Der Vorname darf nicht leer sein")
-  @Size(min=3, message="Bitte min. 3 Buchstaben eingeben")
-  private String firstName;
-  @NotNull(message="Der Nachname darf nicht leer sein")
-  private String lastName;
-  private String email;
-  private String phone;
-  private String fax;
-  private Sex sex;
-  private String country;
-  private Locale locale;
-  private Date createDate;
-  @ManyToOne(cascade = { CascadeType.ALL })
-  private Company company;
+	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	private Long id;
+	@NotNull(message = "Der Vorname darf nicht leer sein")
+	@Size(min = 3, message = "Bitte mindestens 3 Buchstaben eingeben")
+	@Pattern(regexp = "^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*", message = "Bitte einen gültigen Vornamen eingeben")
+	private String firstName;
+	@NotNull(message = "Der Nachname darf nicht leer sein")
+	@Size(min = 2, message = "Bitte mindestens 2 Buchstaben eingeben")
+	@Pattern(regexp = "^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*", message = "Bitte einen gültigen Nachnamen eingeben")
+	private String lastName;
+	@NotNull(message = "Die E-Mail-Adresse darf nicht leer sein")
+	@Email(message = "Bitte geben Sie eine gültige E-Mail-Adresse ein")
+	private String email;
+	@Phone(message = "Bitte geben Sie eine gültige Telefonnummer ein")
+	private String phone;
+	@Phone(message = "Bitte geben Sie eine gültige Faxnummer ein")
+	private String fax;
+	private Sex sex;
+	private String country;
+	private Locale locale;
+	private Date createDate;
+	@ManyToOne(cascade = { CascadeType.ALL })
+	@NotNull(message = "Company darf nicht leer sein")
+	private Company company;
 
-  /**
-   * Default constructor for JAX-RS (object <> JSON serialization)
-   */
-  public Customer() {
-	 
-  }
+	/**
+	 * Default constructor for JAX-RS (object <> JSON serialization)
+	 */
+	public Customer() {
 
-  public Customer(String firstName, String lastName, String email,
-      String phone, String fax, Sex sex, String country, Locale locale,
-      Date createDate, Company company) {
-    this.firstName = firstName;
-    this.lastName = lastName;
-    this.email = email;
-    this.phone = phone;
-    this.fax = fax;
-    this.sex = sex;
-    this.country = country;
-    this.locale = locale;
-    this.createDate = createDate;
-    this.company = company;
-  }
+	}
 
-  // -------- getters and setters
+	public Customer(String firstName, String lastName, String email,
+			String phone, String fax, Sex sex, String country, Locale locale,
+			Date createDate, Company company) {
+		this.firstName = firstName;
+		this.lastName = lastName;
+		this.email = email;
+		this.phone = phone;
+		this.fax = fax;
+		this.sex = sex;
+		this.country = country;
+		this.locale = locale;
+		this.createDate = createDate;
+		this.company = company;
+	}
 
-  public Long getId() {
-    return id;
-  }
+	// -------- getters and setters
 
-  public void setId(Long id) {
-    this.id = id;
-  }
+	public Long getId() {
+		return id;
+	}
 
-  public String getFirstName() {
-    return firstName;
-  }
+	public void setId(Long id) {
+		this.id = id;
+	}
 
-  public void setFirstName(String firstName) {
-    this.firstName = firstName;
-  }
+	public String getFirstName() {
+		return firstName;
+	}
 
-  public String getLastName() {
-    return lastName;
-  }
+	public void setFirstName(String firstName) {
+		this.firstName = firstName;
+	}
 
-  public void setLastName(String lastName) {
-    this.lastName = lastName;
-  }
+	public String getLastName() {
+		return lastName;
+	}
 
-  public String getEmail() {
-    return email;
-  }
+	public void setLastName(String lastName) {
+		this.lastName = lastName;
+	}
 
-  public void setEmail(String email) {
-    this.email = email;
-  }
+	public String getEmail() {
+		return email;
+	}
 
-  public String getPhone() {
-    return phone;
-  }
+	public void setEmail(String email) {
+		this.email = email;
+	}
 
-  public void setPhone(String phone) {
-    this.phone = phone;
-  }
+	public String getPhone() {
+		return phone;
+	}
 
-  public String getFax() {
-    return fax;
-  }
+	public void setPhone(String phone) {
+		this.phone = phone;
+	}
 
-  public void setFax(String fax) {
-    this.fax = fax;
-  }
+	public String getFax() {
+		return fax;
+	}
 
-  public Sex getSex() {
-    return sex;
-  }
+	public void setFax(String fax) {
+		this.fax = fax;
+	}
 
-  public void setSex(Sex sex) {
-    this.sex = sex;
-  }
+	public Sex getSex() {
+		return sex;
+	}
 
-  public String getCountry() {
-    return country;
-  }
+	public void setSex(Sex sex) {
+		this.sex = sex;
+	}
 
-  public void setCountry(String country) {
-    this.country = country;
-  }
+	public String getCountry() {
+		return country;
+	}
 
-  public Locale getLocale() {
-    return locale;
-  }
+	public void setCountry(String country) {
+		this.country = country;
+	}
 
-  public void setLocale(Locale locale) {
-    this.locale = locale;
-  }
+	public Locale getLocale() {
+		return locale;
+	}
 
-  public Date getCreateDate() {
-    return createDate;
-  }
+	public void setLocale(Locale locale) {
+		this.locale = locale;
+	}
 
-  public void setCreateDate(Date createDate) {
-    this.createDate = createDate;
-  }
+	public Date getCreateDate() {
+		return createDate;
+	}
 
-  public Company getCompany() {
-    return company;
-  }
+	public void setCreateDate(Date createDate) {
+		this.createDate = createDate;
+	}
 
-  public void setCompany(Company company) {
-    this.company = company;
-  }
+	public Company getCompany() {
+		return company;
+	}
+
+	public void setCompany(Company company) {
+		this.company = company;
+	}
 
 }

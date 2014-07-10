@@ -49,6 +49,7 @@ angular.module('CrmDemo.controllers',[]).controller('CustomerDetailCtrl',['$scop
 
     $scope.customers = Customer.query();
     $scope.filteredResults = false;
+    $scope.result = "";
 
     $scope.search = function() {
         $scope.customers = Customer.query(
@@ -78,6 +79,15 @@ angular.module('CrmDemo.controllers',[]).controller('CustomerDetailCtrl',['$scop
                 } else {
                     $scope.customers = Customer.query();
                 }
+            });
+    };
+    $scope.sendMail = function(customerId) {
+        Customer.sendMail(
+            {
+                id: customerId
+            },
+            function() {
+                $scope.result = "Mail sent";
             });
     }
 

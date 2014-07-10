@@ -1,5 +1,6 @@
 package com.mycompany.control;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.ejb.Local;
@@ -20,14 +21,13 @@ public class GasProductService {
 	@PersistenceContext
 	private EntityManager entityManager;
 
-	public void saveCustomer(Product product) {
+	public void saveGasProduct(Product product) {
 		entityManager.persist(product);
 	}
 
 	public List<GasProduct> findGasProducts() {
-		QGasProduct qProduct = QGasProduct.gasProduct;
-		JPAQuery query = new JPAQuery(entityManager);
-		return query.from(qProduct).list(qProduct);
+		
+		return new ArrayList<GasProduct>();
 	}
 
 	public GasProduct findGasProductById(Long id) {
@@ -38,15 +38,9 @@ public class GasProductService {
 		entityManager.merge(gasProduct);
 	}
 	
-	public List<GasProduct> findGasProduct(String searchString) {
-		String[] searchTerms = splitSearchString(searchString);
-		QGasProduct qProduct = QGasProduct.gasProduct;
-		JPAQuery query = new JPAQuery(entityManager);
-		BooleanBuilder builder = new BooleanBuilder();
-	    for (String term : searchTerms){
-	        builder.or(qProduct.name.eq(term));
-	    }		
-		return query.from(qProduct).where(builder).list(qProduct);
+	public List<GasProduct> findGasProducts(String searchString) {
+		
+		return new ArrayList<GasProduct>();
 	}
 
 	private String[] splitSearchString(String searchString) {

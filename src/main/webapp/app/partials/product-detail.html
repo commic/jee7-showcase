@@ -2,7 +2,7 @@
 
 <form class="form-horizontal" method="post"
 	enctype="multipart/form-data" style="margin-top: 30px;"
-	action="/rest/product/save">
+	action="/rest/gasproduct/save">
 	<div class="row">
 		<div class="col-md-6">
 			<fieldset>
@@ -15,25 +15,31 @@
 				<div class="control-group">
 					<label class="control-label">name</label>
 					<div class="controls">
-						<input type="text" ng-model="product.name" class="form-control">
+						<input name="productName" type="text" ng-model="product.name" class="form-control">
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">price</label>
 					<div class="controls">
-						<input type="text" ng-model="product.price" class="form-control">
+						<input name="price" type="text" ng-model="product.price" class="form-control">
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">volume</label>
 					<div class="controls">
-						<input type="text" ng-model="product.volume" class="form-control">
+						<input name="volume" type="text" ng-model="product.volume" class="form-control">
 					</div>
 				</div>
 				<div class="control-group">
 					<label class="control-label">Product category</label>
 					<div class="controls">
-						<select ng-init="product.productCategory.name" ng-model="productCategories" ng-options="category.name for category in productCategories"></select>
+						<select name="categoryName" ng-init="product.productCategory.name" ng-model="productCategories" ng-options="category.name for categoryName in productCategories"></select>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">Select a thumbnail</label>
+					<div class="controls">
+						<input type="file" name="thumbnail" size="5000" />
 					</div>
 				</div>
 				<div class="control-group" style="margin-top: 20px;">

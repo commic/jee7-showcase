@@ -8,7 +8,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.mycompany.entity.Product;
+import com.mycompany.entity.ProductCategory;
 import com.mycompany.entity.QProduct;
+import com.mycompany.entity.QProductCategory;
 import com.mysema.query.jpa.impl.JPAQuery;
 import com.mysema.query.types.path.EntityPathBase;
 
@@ -48,6 +50,10 @@ public class ProductService {
 					.listResults(productType)
 					.getResults();
 					
+	}
+	
+	public List<ProductCategory> findAllProductCategories() {
+		return new JPAQuery(entityManager).from(QProductCategory.productCategory).listResults(QProductCategory.productCategory).getResults();
 	}
 	
 }

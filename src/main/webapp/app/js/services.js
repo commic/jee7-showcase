@@ -26,7 +26,7 @@ angular.module('CrmDemo.services', [ 'ngResource' ]).value('Debouncer', {
 			}, wait);
 		};
 	}
-}).value('version', '0.1').factory('Customer', function($resource) {
+}).value('version', '0.1').factory('Customer', function($resource, $http) {
 	var Customer = $resource(
 
 	"http://localhost\\:8080/" + MODULE_NAME + "/rest/customer/:id", {
@@ -36,12 +36,18 @@ angular.module('CrmDemo.services', [ 'ngResource' ]).value('Debouncer', {
 			method : 'PUT'
 		}
 	});
-
+	Customer['sendMail'] = function(customerId){
+		 var request = $http({
+			 method: "get",
+			 url: "/" + MODULE_NAME + "/rest/customer/mail/" + customerId.id
+		});
+		return request; 
+	};
 	return Customer;
 }).factory('Product', function($resource) {
 	var Product = $resource(
 
-	"http://localhost\\:8080/" + MODULE_NAME + "/rest/product/:id", {
+	"http://localhost\\:8080/" + MODULE_NAME + "/rest/gasproduct/:id", {
 		id : '@id'
 	}, {
 		update : {
@@ -53,7 +59,7 @@ angular.module('CrmDemo.services', [ 'ngResource' ]).value('Debouncer', {
 }).factory('ProductCategory', function($resource) {
 	var ProductCategory = $resource(
 
-	"http://localhost\\:8080/" + MODULE_NAME + "/rest/productcategory/:id", {
+	"http://localhost\\:8080/" + MODULE_NAME + "/rest/product/category/:id", {
 		id : '@id'
 	}, {
 		update : {

@@ -1,8 +1,5 @@
 package com.mycompany.entity;
 
-import java.math.BigDecimal;
-import java.util.Arrays;
-
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -12,6 +9,9 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.Transient;
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.FormParam;
 
 import org.jboss.resteasy.annotations.providers.multipart.PartType;
@@ -22,16 +22,21 @@ public abstract class Product {
 
 	@Id
 	private long id;
+	@NotNull(message="Bitte geben Sie einen Namen an")
 	private String name;
 	
-	@ManyToOne
+	@ManyToOne(optional=true)
 	private ProductCategory category;
 	
-	private BigDecimal price;
+	@Transient
+	private String categoryName;
+	
+	@DecimalMin(value="0", message="Der Preis darf nicht negativ sein")
+	private Integer price;
 	
 	@Lob
 	@Basic(fetch=FetchType.LAZY)
-	@Column(length=100000)
+	@Column(length=100000, nullable=true)
 	private byte[] thumbnail;
 	
 	public Product() {}
@@ -40,6 +45,8 @@ public abstract class Product {
 		return name;
 	}
 
+	@FormParam("productName")
+	@PartType("html/text")
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -51,13 +58,29 @@ public abstract class Product {
 	public void setCategory(ProductCategory category) {
 		this.category = category;
 	}
-
-	public BigDecimal getPrice() {
-		return price;
+	
+	@FormParam("categoryName")
+	@PartType("html/text")
+	public void setCategoryName(String name) {
+		this.categoryName = name;
 	}
 
-	public void setPrice(BigDecimal price) {
+	public Integer getPrice() {
+		return price;
+	}
+	
+	public void setPrice(Integer price) {
 		this.price = price;
+	}
+	
+	@FormParam("price")
+	@PartType("html/text")
+	public void setPriceText(String price) {
+		try{
+			setPrice(Integer.parseInt(price));
+		}catch(NumberFormatException e) {
+			setPrice(0);
+		}
 	}
 
 	public byte[] getThumbnail() {

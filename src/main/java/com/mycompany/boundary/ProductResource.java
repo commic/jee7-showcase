@@ -1,36 +1,21 @@
 package com.mycompany.boundary;
 
+import javax.ejb.EJB;
+import javax.ws.rs.GET;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.UriInfo;
 
-import com.mycompany.entity.Product;
+import com.mycompany.control.ProductService;
 
 public class ProductResource implements IProductResource{
+
+	@EJB
+	private ProductService productService;
 	
-	@Override
-	public Response saveProduct(UriInfo uriInfo, Product product) {
- 
-		// TODO: Save picture to the database 
-		return Response.status(200)
-		    .entity("Produkt wurde erfolgreich gespeichert.").build();
- 
-	}
-
-	@Override
-	public Response findProductById(String productId) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Response findProducts(String searchString) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Response deleteProduct(Long productId) {
-		// TODO Auto-generated method stub
-		return null;
+	@GET
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response findProductCategories(String searchString){
+		return Response.ok(productService.findAllProductCategories()).build();
 	}
 }
