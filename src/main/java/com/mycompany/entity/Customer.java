@@ -42,9 +42,9 @@ public class Customer {
 	@NotNull(message = "Die E-Mail-Adresse darf nicht leer sein")
 	@Email(message = "Bitte geben Sie eine gültige E-Mail-Adresse ein")
 	private String email;
-	@Phone(message = "Bitte geben Sie eine gültige Telefonnummer ein")
+	//@Phone(message = "Bitte geben Sie eine gültige Telefonnummer ein")
 	private String phone;
-	@Phone(message = "Bitte geben Sie eine gültige Faxnummer ein")
+	//@Phone(message = "Bitte geben Sie eine gültige Faxnummer ein")
 	private String fax;
 	private Sex sex;
 	private String country;
