@@ -10,7 +10,9 @@ public class GasProduct extends Product {
 
 	private double volumne; 
 	
-	public GasProduct() {}
+	public GasProduct() {
+		super();
+	}
 
 	public double getVolumne() {
 		return volumne;

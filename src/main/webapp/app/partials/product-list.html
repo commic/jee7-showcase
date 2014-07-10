@@ -21,7 +21,9 @@
 				<tr>
 					<th>#</th>
 					<th>Product name</th>
+                    <th>Price</th>
 					<th>Category</th>
+                    <th>Thumbnail</th>
 					<th colspan="2">Options</th>
 				</tr>
 			</thead>
@@ -31,6 +33,7 @@
 					<td>{{product.name}}</td>
 					<td>{{product.price}}</td>
 					<td>{{product.category.name}}</td>
+                    <td><img src="data:image/jpg;base64,{{product.thumbnail}}"></td>
 					<td><a href="#/product/edit/{{product.id}}" title="edit" class="btn btn-xs btn-default"><i
 							class="glyphicon glyphicon-edit"></i></a> <a class="btn btn-xs btn-default" ng-click="deleteProduct(product.id)"
 						title="delete"><i class="glyphicon glyphicon-remove"></i></a></td>

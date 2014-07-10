@@ -4,6 +4,7 @@ import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
@@ -21,6 +22,7 @@ import org.jboss.resteasy.annotations.providers.multipart.PartType;
 public abstract class Product {
 
 	@Id
+	@GeneratedValue
 	private long id;
 	@NotNull(message="Bitte geben Sie einen Namen an")
 	private String name;
