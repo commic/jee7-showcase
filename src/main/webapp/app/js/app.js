@@ -16,18 +16,6 @@ angular.module('CrmDemo', ['CrmDemo.controllers', 'CrmDemo.filters', 'CrmDemo.se
                 templateUrl : 'app/partials/customer-detail.html',
                 controller : 'CustomerDetailCtrl'
             });
-            $routeProvider.when('/product/list', {
-                templateUrl : 'app/partials/product-list.html',
-                controller : 'ProductListCtrl'
-            });
-            $routeProvider.when('/product/edit/:customerId', {
-                templateUrl : 'app/partials/product-detail.html',
-                controller : 'ProductDetailCtrl'
-            });
-            $routeProvider.when('/product/new', {
-                templateUrl : 'app/partials/product-detail.html',
-                controller : 'ProductDetailCtrl'
-            });
             $routeProvider.otherwise({
                 redirectTo : '/customer/list'
             });

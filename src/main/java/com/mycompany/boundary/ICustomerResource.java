@@ -3,7 +3,6 @@ package com.mycompany.boundary;
 import java.net.URISyntaxException;
 
 import javax.ejb.Stateless;
-import javax.mail.MessagingException;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -136,7 +135,7 @@ public interface ICustomerResource {
 	 */
 	@PUT
 	@Path("/" + CUSTOMER_ID)
-	Response updateCustomer(Customer customer);
+	Response updateCustomer(@PathParam(CUSTOMER_ID_PLAIN) Long customerId, Customer customer);
 
 	/**
 	 * Diese Methode loescht einen Kunden (D from CRUD).
@@ -161,9 +160,4 @@ public interface ICustomerResource {
 	@Path("/hello")
 	@Produces(MediaType.APPLICATION_JSON)
 	public abstract Response sayHello();
-	
-	@GET
-	@Path("/mail/" + CUSTOMER_ID)
-	@Produces(MediaType.APPLICATION_JSON)
-	public Response sendProductListToCustomer(@PathParam(CUSTOMER_ID_PLAIN) Long customerId) throws MessagingException;
 }

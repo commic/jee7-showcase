@@ -16,7 +16,6 @@ import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 
 import com.mycompany.entity.constraint.Email;
-import com.mycompany.entity.constraint.Phone;
 
 /**
  * Customer entity, representing a customer object that can be persisted to a

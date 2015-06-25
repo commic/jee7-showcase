@@ -1,6 +1,6 @@
 'use strict';
 
-var MODULE_NAME = "jee7-showcase";
+var MODULE_NAME = "crm-demo";
 
 /* Services */
 angular.module('CrmDemo.services', [ 'ngResource' ]).value('Debouncer', {
@@ -36,36 +36,5 @@ angular.module('CrmDemo.services', [ 'ngResource' ]).value('Debouncer', {
 			method : 'PUT'
 		}
 	});
-	Customer['sendMail'] = function(customerId){
-		 var request = $http({
-			 method: "get",
-			 url: "/" + MODULE_NAME + "/rest/customer/mail/" + customerId.id
-		});
-		return request; 
-	};
 	return Customer;
-}).factory('Product', function($resource) {
-	var Product = $resource(
-
-	"http://localhost\\:8080/" + MODULE_NAME + "/rest/gasproduct/:id", {
-		id : '@id'
-	}, {
-		update : {
-			method : 'POST'
-		}
-	});
-
-	return Product;
-}).factory('ProductCategory', function($resource) {
-	var ProductCategory = $resource(
-
-	"http://localhost\\:8080/" + MODULE_NAME + "/rest/product/category/:id", {
-		id : '@id'
-	}, {
-		update : {
-			method : 'PUT'
-		}
-	});
-
-	return ProductCategory;
 });

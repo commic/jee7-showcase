@@ -3,19 +3,11 @@ package com.mycompany.control;
 import java.util.List;
 import java.util.Set;
 
-import javax.annotation.Resource;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
-import javax.mail.Address;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -23,10 +15,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import com.mycompany.entity.Customer;
-import com.mycompany.entity.Product;
-import com.mycompany.entity.QCustomer;
-import com.mysema.query.BooleanBuilder;
-import com.mysema.query.jpa.impl.JPAQuery;
 
 @Stateless
 @Local
@@ -34,9 +22,6 @@ public class CustomerService {
 
 	@PersistenceContext
 	private EntityManager entityManager;
-	
-	@Resource(mappedName="java:jboss/mail/Default")
-	private Session mailSession;
 	
 	// Get configured validator directly from JBoss AS 7 environment
     @Inject
@@ -61,28 +46,10 @@ public class CustomerService {
 		return messages;
 	}
 
-	public List<Customer> findQCustomers(String searchString) {
-		String[] searchTerms = splitSearchString(searchString);
-		QCustomer qCustomer = QCustomer.customer;
-		JPAQuery query = new JPAQuery(entityManager);
-		BooleanBuilder builder = new BooleanBuilder();
-		for (String term : searchTerms) {
-			builder.or(qCustomer.firstName.eq(term));
-			builder.or(qCustomer.lastName.eq(term));
-		}
-		return query.from(qCustomer).where(builder).list(qCustomer);
-	}
-
 	public List<Customer> findAllCustomers() {
 		TypedQuery<Customer> query = entityManager.createQuery(
 				"SELECT e FROM Customer e", Customer.class);
 		return query.getResultList();
-	}
-
-	public List<Customer> findAllQCustomers() {
-		QCustomer qCustomer = QCustomer.customer;
-		JPAQuery query = new JPAQuery(entityManager);
-		return query.from(qCustomer).list(qCustomer);
 	}
 
 	@TransactionAttribute(TransactionAttributeType.NEVER)
@@ -123,20 +90,23 @@ public class CustomerService {
 	}
 
 	/**
-	 * Diese Art der Query ist schwierig zu warten gefährlich: SQL-Injection:
-	 * Beispiel: Max' or where e.lastName like '%
+	 * Standard-JPA-Query
 	 * 
 	 * @param searchString
 	 * @return
 	 */
 	public List<Customer> findCustomers(String searchString) {
-		String queryString = "SELECT e FROM Customer e where ";
-
-		queryString += "e.firstName ='" + searchString + "'";
-
+		String queryString = "SELECT e FROM Customer e where";
+		String[] search = splitSearchString(searchString);
+		for(int i=0;i<search.length;i++){
+			if(i == search.length - 1) {
+				queryString += " e.firstName ='" + search[i] + "'";
+			}else{
+				queryString += " e.firstName ='" + search[i] + "' or";	
+			}
+		}
 		TypedQuery<Customer> query = entityManager.createQuery(queryString,
 				Customer.class);
-
 		return query.getResultList();
 	}
 
@@ -146,24 +116,4 @@ public class CustomerService {
 			entityManager.remove(customer);
 		}
 	}
-
-	public void sendProductNewsLetterToCustomer(Long customerId, List<? extends Product> products) throws MessagingException {
-		Customer targetCustomer = findCustomerById(customerId);
-		MimeMessage message = new MimeMessage(mailSession);
-		Address from = new InternetAddress("jee7@dev.commic.eu");
-		Address[] to = new InternetAddress[] {new InternetAddress(targetCustomer.getEmail()) };
-		message.setFrom(from);
-		message.setRecipients(Message.RecipientType.TO, to);
-		message.setSubject("Newsletter of our current products!");
-		message.setSentDate(new java.util.Date());
-		StringBuilder contentBuilder = new StringBuilder();
-		contentBuilder.append("Mail sent from JBoss AS 7");
-		for(Product pro : products){
-			contentBuilder.append(pro.toString());
-		}
-		message.setContent(contentBuilder.toString(),"text/plain");
-		Transport.send(message);
-		
-	}
-
 }
