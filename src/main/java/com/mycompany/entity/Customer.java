@@ -12,10 +12,6 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
-
-import com.mycompany.entity.constraint.Email;
 
 /**
  * Customer entity, representing a customer object that can be persisted to a
@@ -30,16 +26,8 @@ public class Customer {
 	@Id
 	@GeneratedValue(strategy = GenerationType.SEQUENCE)
 	private Long id;
-	@NotNull(message = "Der Vorname darf nicht leer sein")
-	@Size(min = 3, message = "Bitte mindestens 3 Buchstaben eingeben")
-	@Pattern(regexp = "^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*", message = "Bitte einen gültigen Vornamen eingeben")
 	private String firstName;
-	@NotNull(message = "Der Nachname darf nicht leer sein")
-	@Size(min = 2, message = "Bitte mindestens 2 Buchstaben eingeben")
-	@Pattern(regexp = "^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*", message = "Bitte einen gültigen Nachnamen eingeben")
 	private String lastName;
-	@NotNull(message = "Die E-Mail-Adresse darf nicht leer sein")
-	@Email(message = "Bitte geben Sie eine gültige E-Mail-Adresse ein")
 	private String email;
 	//@Phone(message = "Bitte geben Sie eine gültige Telefonnummer ein")
 	private String phone;

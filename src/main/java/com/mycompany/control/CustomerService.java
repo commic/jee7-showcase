@@ -65,28 +65,7 @@ public class CustomerService {
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void updateCustomer(Customer customer)  throws ValidationException {
-		Set<ConstraintViolation<Customer>> violations = validator.validate(customer);
-		if(violations.size() == 0) {
-			entityManager.merge(customer);	
-		}else{
-			throw new ValidationException(extractViolationMessages(violations));			
-		}
-	}
-
-	private String[] splitSearchString(String searchString) {
-		String[] searchTerms = new String[] { searchString };
-		if (searchString.contains(", ")) {
-			searchTerms = searchString.split(", ");
-		} else if (searchString.contains("; ")) {
-			searchTerms = searchString.split("; ");
-		} else if (searchString.contains(",")) {
-			searchTerms = searchString.split(",");
-		} else if (searchString.contains(";")) {
-			searchTerms = searchString.split(";");
-		} else if (searchString.contains(" ")) {
-			searchTerms = searchString.split(" ");
-		}
-		return searchTerms;
+		// TODO ...
 	}
 
 	/**
@@ -97,23 +76,13 @@ public class CustomerService {
 	 */
 	public List<Customer> findCustomers(String searchString) {
 		String queryString = "SELECT e FROM Customer e where";
-		String[] search = splitSearchString(searchString);
-		for(int i=0;i<search.length;i++){
-			if(i == search.length - 1) {
-				queryString += " e.firstName ='" + search[i] + "'";
-			}else{
-				queryString += " e.firstName ='" + search[i] + "' or";	
-			}
-		}
+		// TODO ...
 		TypedQuery<Customer> query = entityManager.createQuery(queryString,
 				Customer.class);
 		return query.getResultList();
 	}
 
 	public void deleteCustomer(Long id) {
-		Customer customer = findCustomerById(id);
-		if (customer != null) {
-			entityManager.remove(customer);
-		}
+		// TODO ...
 	}
 }

@@ -1,6 +1,5 @@
 package com.mycompany.boundary;
 
-import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
@@ -10,7 +9,6 @@ import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
 import com.mycompany.control.CustomerService;
-import com.mycompany.control.ValidationException;
 import com.mycompany.entity.Customer;
 
 public class CustomerResource implements ICustomerResource {
@@ -45,15 +43,9 @@ public class CustomerResource implements ICustomerResource {
 	 */
 	@Override
 	public Response saveCustomer(UriInfo uriInfo, Customer customer)
+	// TODO
 			throws URISyntaxException {
-		try{
-			customerService.saveCustomer(customer);
-		}catch(ValidationException e) {
-			e.printViolations();
-		}		
-		return Response.created(
-				new URI(uriInfo.getRequestUri() + "/" + customer.getId()))
-				.build();
+		return Response.ok().entity(customer).build();
 	}
 
 	/*
@@ -65,14 +57,9 @@ public class CustomerResource implements ICustomerResource {
 	 */
 	@Override
 	public Response findCustomerById(String customerId) {
-		Customer customer = customerService.findCustomerById(Long
-				.parseLong(customerId));
-
-		if (customer != null) {
-			return Response.ok().entity(customer).build();
-		} else {
-			return Response.status(Status.NOT_FOUND).build();
-		}
+		// TODO
+		Customer customer = null;
+		return Response.ok().entity(customer).build();
 	}
 
 	/*
@@ -84,11 +71,7 @@ public class CustomerResource implements ICustomerResource {
 	 */
 	@Override
 	public Response updateCustomer(Long customerId, Customer customer) {
-		try{
-		customerService.updateCustomer(customer);
-		}catch(ValidationException e) {
-			
-		}
+		// TODO
 		return Response.status(Status.ACCEPTED).build();
 	}
 
@@ -100,7 +83,7 @@ public class CustomerResource implements ICustomerResource {
 	 */
 	@Override
 	public Response deleteCustomer(Long customerId) {
-		customerService.deleteCustomer(customerId);
+		// TODO
 		return Response.ok().build();
 	}
 
