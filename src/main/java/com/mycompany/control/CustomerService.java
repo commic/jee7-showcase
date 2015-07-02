@@ -65,24 +65,61 @@ public class CustomerService {
 
 	@TransactionAttribute(TransactionAttributeType.REQUIRED)
 	public void updateCustomer(Customer customer)  throws ValidationException {
-		// TODO ...
+		Set<ConstraintViolation<Customer>> violations = validator.validate(customer);
+		if(violations.size() == 0) {
+			entityManager.merge(customer);	
+		}else{
+			throw new ValidationException(extractViolationMessages(violations));			
+		}
+	}
+	
+	private String[] splitSearchString(String searchString) {
+		String[] searchTerms = new String[] { searchString };
+		if (searchString.contains(", ")) {
+			searchTerms = searchString.split(", ");
+		} else if (searchString.contains("; ")) {
+			searchTerms = searchString.split("; ");
+		} else if (searchString.contains(",")) {
+			searchTerms = searchString.split(",");
+		} else if (searchString.contains(";")) {
+			searchTerms = searchString.split(";");
+		} else if (searchString.contains(" ")) {
+			searchTerms = searchString.split(" ");
+		}
+		return searchTerms;
 	}
 
 	/**
 	 * Standard-JPA-Query
 	 * 
-	 * @param searchString
+	 * @param searchString: John - John Smith
 	 * @return
 	 */
 	public List<Customer> findCustomers(String searchString) {
 		String queryString = "SELECT e FROM Customer e where";
-		// TODO ...
+		int i = 0;
+		if(searchString == null || searchString.isEmpty()) {
+			queryString = "SELECT e FROM Customer e";
+		}else{
+			String[] searchParams = splitSearchString(searchString);
+			for(String s: searchParams) {
+				if(searchParams.length-1 == i) {
+					queryString += " e.firstName ='" + s + "'";
+				}else{
+					queryString += " e.firstName ='" + s + "' or";
+				}
+				i++;
+			}
+		}		
 		TypedQuery<Customer> query = entityManager.createQuery(queryString,
 				Customer.class);
 		return query.getResultList();
 	}
 
 	public void deleteCustomer(Long id) {
-		// TODO ...
+		Customer customer = findCustomerById(id);
+		if(customer != null) {
+			entityManager.remove(customer);	
+		}
 	}
 }

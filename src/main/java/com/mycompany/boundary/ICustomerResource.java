@@ -132,10 +132,11 @@ public interface ICustomerResource {
 	 * 
 	 * @param customer Der zu aktualisierende Kunde als Java-Objekt
 	 * @return HTTP Code 202
+	 * @throws URISyntaxException 
 	 */
 	@PUT
 	@Path("/" + CUSTOMER_ID)
-	Response updateCustomer(@PathParam(CUSTOMER_ID_PLAIN) Long customerId, Customer customer);
+	Response updateCustomer(Customer customer) throws URISyntaxException;
 
 	/**
 	 * Diese Methode loescht einen Kunden (D from CRUD).
@@ -157,7 +158,7 @@ public interface ICustomerResource {
 	 * @return Eine einfache Zeichenkette z.B. "Hello Java EE!"
 	 */
 	@GET
-	@Path("/hello")
-	@Produces(MediaType.APPLICATION_JSON)
-	public abstract Response sayHello();
+	@Path("/hello/{name}")
+	@Produces(MediaType.TEXT_PLAIN)
+	public abstract Response sayHello(@PathParam("name") String name, @QueryParam("nachname")String nachname);
 }
