@@ -24,6 +24,47 @@ angular.module('CrmDemo.controllers',[]).controller('CustomerDetailCtrl',['$scop
             });
         }
     };
+}]).controller('ProductDetailCtrl',['$scope','$location', '$routeParams','Product','ProductCategory', function ($scope, $location, $routeParams, Product, ProductCategory) {
+	$scope.productCategories = ProductCategory.query();
+    if ($location.path() === "/product/new") {
+        $scope.product = {};
+    } else {
+        $scope.product = Product.get({
+            id : $routeParams.productId
+        });
+    }
+
+    $scope.save = function() {
+        if (!!$scope.product.id) {
+            Product.update($scope.product, function(product) {
+                $location.path('/product/list');
+            });
+        } else {
+            Product.save($scope.product, function(product) {
+                $location.path('/product/list');
+            });
+        }
+    };
+}]).controller('ProductCategoryDetailCtrl',['$scope','$location', '$routeParams','ProductCategory', function ($scope, $location, $routeParams, ProductCategory) {
+	if ($location.path() === "/category/new") {
+        $scope.category = {};
+    } else {
+        $scope.category = ProductCategory.get({
+            id : $routeParams.categoryId
+        });
+    }
+
+    $scope.save = function() {
+        if (!!$scope.category.id) {
+        	ProductCategory.update($scope.category, function(category) {
+                $location.path('/category/list');
+            });
+        } else {
+        	ProductCategory.save($scope.category, function(category) {
+                $location.path('/category/list');
+            });
+        }
+    };
 }]).controller('CustomerListCtrl',['$scope','Customer', function ($scope, Customer) {
 
     $scope.customers = Customer.query();
@@ -69,5 +110,63 @@ angular.module('CrmDemo.controllers',[]).controller('CustomerDetailCtrl',['$scop
                 $scope.result = "Mail sent";
             });
     }
+
+}]).controller('ProductListCtrl',['$scope','Product', function ($scope, Product) {
+
+    $scope.products = Product.query();
+    $scope.filteredResults = false;
+
+    $scope.search = function() {
+        $scope.products = Product.query(
+            {
+                searchString: $scope.searchString
+            },
+            function() {
+                $scope.filteredResults = true;
+            }
+        );
+    };
+
+    $scope.clearSearch = function() {
+        $scope.searchString = null;
+        $scope.filteredResults = false;
+        $scope.products = Product.query();
+    };
+
+    $scope.deleteProduct = function(productId) {
+        Product.delete(
+            {
+                id: productId
+            },
+            function() {
+                if(!!$scope.searchString && !!$scope.filteredResults) {
+                    $scope.search();
+                } else {
+                    $scope.products = Product.query();
+                }
+            });
+    };
+
+}]).controller('ProductCategoryListCtrl',['$scope','ProductCategory', function ($scope, ProductCategory) {
+
+    $scope.categories = ProductCategory.query();
+    $scope.filteredResults = false;
+
+    $scope.search = function() {
+        $scope.categories = ProductCategory.query(
+            {
+                searchString: $scope.searchString
+            },
+            function() {
+                $scope.filteredResults = true;
+            }
+        );
+    };
+
+    $scope.clearSearch = function() {
+        $scope.searchString = null;
+        $scope.filteredResults = false;
+        $scope.categories = ProductCategory.query();
+    };
 
 }]);

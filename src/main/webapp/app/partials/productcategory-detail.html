@@ -1,0 +1,30 @@
+<!-- partial for the customer detail page for creating, updating and displaying customers -->
+
+<form class="form-horizontal" method="post"
+	enctype="multipart/form-data" style="margin-top: 30px;">
+	<div class="row">
+		<div class="col-md-6">
+			<fieldset>
+				<legend ng-show="!!category.id">
+					Edit: {{ category.name }}<span class="subtle_text">#{{category.id}}</span>
+				</legend>
+
+				<legend ng-show="!category.id">Create product category</legend>
+
+				<div class="control-group">
+					<label class="control-label">Name</label>
+					<div class="controls">
+						<input name="categoryName" type="text" ng-model="category.name" class="form-control">
+					</div>
+				</div>
+				<div class="control-group" style="margin-top: 20px;">
+					<div class="controls">
+						<button ng-click="save()" class="btn btn-primary"><span style="margin-right: 5px;" class="glyphicon glyphicon-save"></span>Save</button>
+						<a href="#/category/list" class="btn btn-default"><span style="margin-right: 5px;" class="glyphicon glyphicon-log-out"></span>Cancel</a>
+					</div>
+				</div>
+
+			</fieldset>
+		</div>
+	</div>
+</form>

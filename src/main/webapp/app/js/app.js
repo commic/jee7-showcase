@@ -19,4 +19,28 @@ angular.module('CrmDemo', ['CrmDemo.controllers', 'CrmDemo.filters', 'CrmDemo.se
             $routeProvider.otherwise({
                 redirectTo : '/customer/list'
             });
+            $routeProvider.when('/product/list', {
+                templateUrl : 'app/partials/product-list.html',
+                controller : 'ProductListCtrl'
+            });
+            $routeProvider.when('/product/edit/:productId', {
+                templateUrl : 'app/partials/product-detail.html',
+                controller : 'ProductDetailCtrl'
+            });
+            $routeProvider.when('/product/new', {
+                templateUrl : 'app/partials/product-detail.html',
+                controller : 'ProductDetailCtrl'
+            });
+            $routeProvider.when('/category/list', {
+                templateUrl : 'app/partials/productcategory-list.html',
+                controller : 'ProductCategoryListCtrl'
+            });
+            $routeProvider.when('/category/edit/:categoryId', {
+                templateUrl : 'app/partials/productcategory-detail.html',
+                controller : 'ProductCategoryDetailCtrl'
+            });
+            $routeProvider.when('/category/new', {
+                templateUrl : 'app/partials/productcategory-detail.html',
+                controller : 'ProductCategoryDetailCtrl'
+            });
         } ]);

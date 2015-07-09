@@ -1,0 +1,54 @@
+<!-- partial for the customer detail page for creating, updating and displaying customers -->
+
+<form class="form-horizontal" method="post"
+	enctype="multipart/form-data" style="margin-top: 30px;">
+	<div class="row">
+		<div class="col-md-6">
+			<fieldset>
+				<legend ng-show="!!product.id">
+					Edit: {{ product.name }}<span class="subtle_text">#{{product.id}}</span>
+				</legend>
+
+				<legend ng-show="!product.id">Create Product</legend>
+
+				<div class="control-group">
+					<label class="control-label">Name</label>
+					<div class="controls">
+						<input name="productName" type="text" ng-model="product.name" class="form-control">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">Price</label>
+					<div class="controls">
+						<input name="price" type="text" ng-model="product.price" class="form-control">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">Volume</label>
+					<div class="controls">
+						<input name="volume" type="text" ng-model="product.volume" class="form-control">
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">Product category</label>
+					<div class="controls">
+						<select name="categoryName" ng-init="product.productCategory.name" ng-model="productCategories" ng-options="category.name for categoryName in productCategories"></select>
+					</div>
+				</div>
+				<div class="control-group">
+					<label class="control-label">Select a thumbnail</label>
+					<div class="controls">
+						<input type="file" name="thumbnail" size="5000" />
+					</div>
+				</div>
+				<div class="control-group" style="margin-top: 20px;">
+					<div class="controls">
+						<button ng-click="save()" class="btn btn-primary"><span style="margin-right: 5px;" class="glyphicon glyphicon-save"></span>Save</button>
+						<a href="#/product/list" class="btn btn-default"><span style="margin-right: 5px;" class="glyphicon glyphicon-log-out"></span>Cancel</a>
+					</div>
+				</div>
+
+			</fieldset>
+		</div>
+	</div>
+</form>
