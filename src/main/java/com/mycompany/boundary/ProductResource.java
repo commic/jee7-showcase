@@ -16,7 +16,6 @@ import javax.ws.rs.core.UriInfo;
 
 import com.mycompany.control.GasProductService;
 import com.mycompany.control.ProductService;
-import com.mycompany.entity.Customer;
 import com.mycompany.entity.GasProduct;
 import com.mycompany.entity.Product;
 

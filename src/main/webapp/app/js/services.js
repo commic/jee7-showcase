@@ -52,7 +52,7 @@ var Product = $resource(
 	}).factory('ProductCategory', function($resource) {
 		var ProductCategory = $resource(
 
-		"http://localhost\\:8080/" + MODULE_NAME + "/rest/product/category/:id", {
+		"http://localhost\\:8080/" + MODULE_NAME + "/rest/category/:id", {
 			id : '@id'
 		}, {
 			update : {
