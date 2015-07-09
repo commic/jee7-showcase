@@ -2,6 +2,7 @@ package com.mycompany.boundary;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ws.rs.GET;
@@ -15,7 +16,9 @@ import javax.ws.rs.core.UriInfo;
 
 import com.mycompany.control.GasProductService;
 import com.mycompany.control.ProductService;
+import com.mycompany.entity.Customer;
 import com.mycompany.entity.GasProduct;
+import com.mycompany.entity.Product;
 
 public class ProductResource implements IProductResource{
 
@@ -45,7 +48,13 @@ public class ProductResource implements IProductResource{
 	}
 	
 	public Response findProducts(@QueryParam("searchString") String searchString){
-		return Response.ok().build();
+		List<Product> products;
+		if (searchString != null) {
+			products = productService.findProducts(searchString);
+		} else {
+			products = (List<Product>) productService.findAllProducts();
+		}
+		return Response.ok(products).build();
 	}
 
 	public Response findProductById(String productId) {

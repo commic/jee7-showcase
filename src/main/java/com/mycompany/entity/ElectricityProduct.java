@@ -5,18 +5,18 @@ import javax.persistence.Entity;
 @Entity
 public class ElectricityProduct extends Product {
 
-	private VoltageRange type;
+	private VoltageRange voltageRange;
 	
 	public ElectricityProduct() {
 		super();
 	}
 
-	public VoltageRange getType() {
-		return type;
+	public VoltageRange getVoltageRange() {
+		return voltageRange;
 	}
 
-	public void setType(VoltageRange type) {
-		this.type = type;
+	public void setVoltageRange(VoltageRange voltageRange) {
+		this.voltageRange = voltageRange;
 	}
 	
 }
