@@ -9,7 +9,6 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
 import com.mycompany.entity.GasProduct;
-import com.mycompany.entity.Product;
 import com.mycompany.entity.QGasProduct;
 import com.mysema.query.BooleanBuilder;
 import com.mysema.query.jpa.impl.JPAQuery;

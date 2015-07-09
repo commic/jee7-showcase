@@ -16,7 +16,6 @@ import javax.ws.rs.core.UriInfo;
 import com.mycompany.control.GasProductService;
 import com.mycompany.control.ProductService;
 import com.mycompany.entity.GasProduct;
-import com.mycompany.entity.Product;
 
 public class ProductResource implements IProductResource{
 
@@ -32,15 +31,13 @@ public class ProductResource implements IProductResource{
 		return Response.ok(productService.findAllProductCategories()).build();
 	}
 	
-	public Response saveProduct(@Context UriInfo uriInfo, Product product) throws URISyntaxException {
-		if(product instanceof GasProduct) {
-			gasProductService.saveGasProduct((GasProduct)product);
-		}
+	public Response saveProduct(@Context UriInfo uriInfo, GasProduct product) throws URISyntaxException {
+		gasProductService.saveGasProduct(product);
 		return Response.created(new URI(uriInfo.getRequestUri() + "/" + product.getId()))
 					   .build() ;
 	}
 	
-	public Response updateProduct(Long productId, Product product){		
+	public Response updateProduct(Long productId, GasProduct product){		
 		if(product instanceof GasProduct) {
 			gasProductService.saveGasProduct((GasProduct)product);
 		}
@@ -52,7 +49,7 @@ public class ProductResource implements IProductResource{
 	}
 
 	public Response findProductById(String productId) {
-		Product product = productService.findProductById(Long
+		GasProduct product = gasProductService.findGasProductById(Long
 				.parseLong(productId));
 
 		if (product != null) {

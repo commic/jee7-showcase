@@ -3,7 +3,6 @@ package com.mycompany.boundary;
 import java.net.URISyntaxException;
 
 import javax.ejb.Stateless;
-import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -17,9 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import org.jboss.resteasy.annotations.providers.multipart.MultipartForm;
-
-import com.mycompany.entity.Product;
+import com.mycompany.entity.GasProduct;
 
 @Path("/product")
 @Stateless
@@ -31,10 +28,8 @@ public interface IProductResource {
 	Response findProductCategories(@QueryParam("searchString") String searchString);
 	
 	@POST
-	@Path("/save")
-	@Consumes("multipart/form-data")
 	public Response saveProduct(@Context UriInfo uriInfo,
-			@MultipartForm Product product) throws URISyntaxException;
+			GasProduct product) throws URISyntaxException;
 	
 	@GET
 	@Path("/{productId}")
@@ -51,5 +46,5 @@ public interface IProductResource {
 	
 	@PUT
 	@Path("/{productId}")
-	Response updateProduct(@PathParam(value = "productId") Long productId, Product product);
+	Response updateProduct(@PathParam(value = "productId") Long productId, GasProduct product);
 }

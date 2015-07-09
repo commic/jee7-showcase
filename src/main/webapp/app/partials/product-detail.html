@@ -32,7 +32,7 @@
 				<div class="control-group">
 					<label class="control-label">Product category</label>
 					<div class="controls">
-						<select name="categoryName" ng-init="product.productCategory.name" ng-model="productCategories" ng-options="category.name for categoryName in productCategories"></select>
+						<select ng-options="category.name for category in productCategories track by category.id" ng-model="product.category">
 					</div>
 				</div>
 				<div class="control-group">
