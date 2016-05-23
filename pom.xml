@@ -1,145 +1,400 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.startup.jee</groupId>
 	<artifactId>crm-demo</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<name>CRM Demo</name>
-
+	<description>Java-EE Demoapplikation mit EJB, JPA, REST</description>
 	<properties>
+		<deployment.war.name>mdr-mmapp</deployment.war.name>
+		<maven.compiler.source>1.8</maven.compiler.source>
+		<maven.compiler.target>1.8</maven.compiler.target>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<java.version>1.7</java.version>
 		<querydsl.generated.sources>target/generated-sources/querydsl</querydsl.generated.sources>
+		<version.arquillian.bom>1.1.11.Final</version.arquillian.bom>
+		<version.arquillian.extension.restclient>1.0.0.Alpha4</version.arquillian.extension.restclient>
+		<version.arquillian.wildfly>2.0.0.Final</version.arquillian.wildfly>
+		<version.arquillian_drone>1.1.0.Final</version.arquillian_drone>
+		<version.arquillian_warp>1.0.0.Alpha4</version.arquillian_warp>
+		<version.mockito>1.9.0</version.mockito>
+		<version.fest.assert>1.4</version.fest.assert>
+		<version.javaee7.spec>1.0.3.Final</version.javaee7.spec>
+		<version.jboss.logging>3.2.1.Final</version.jboss.logging>
+		<version.junit>4.12</version.junit>
+		<version.resteasy.multipart>3.0.14.Final</version.resteasy.multipart>
+		<version.mysema.querydsl>3.6.9</version.mysema.querydsl>
+		<version.postgresql.jdbc>9.4-1201-jdbc41</version.postgresql.jdbc>
+		<version.resteasy_jax_rs_2_0>3.0.11.Final</version.resteasy_jax_rs_2_0>
+		<version.org.wildfly.full>10.0.0.Final</version.org.wildfly.full>
+		<version.org.wildfly.build-tools>1.1.6.Final</version.org.wildfly.build-tools>
+		<version.surefire.plugin>2.18.1</version.surefire.plugin>
+		<version.failsafe.plugin>2.19.1</version.failsafe.plugin>
+		<version.resources.plugin>2.7</version.resources.plugin>
+		<version.dependency.plugin>2.10</version.dependency.plugin>
+		<version.war.plugin>2.6</version.war.plugin>
+		<wildfly.home.module>${project.build.directory}/wildfly-${version.org.wildfly.full}</wildfly.home.module>
+		<postgresql.dest.filename>postgresql.jar</postgresql.dest.filename>
 	</properties>
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>org.jboss.spec</groupId>
+				<artifactId>jboss-javaee-7.0</artifactId>
+				<version>${version.javaee7.spec}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.logging</groupId>
+				<artifactId>jboss-logging</artifactId>
+				<version>${version.jboss.logging}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.mysema.querydsl</groupId>
+				<artifactId>querydsl-apt</artifactId>
+				<version>${version.mysema.querydsl}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>com.mysema.querydsl</groupId>
+				<artifactId>querydsl-jpa</artifactId>
+				<version>${version.mysema.querydsl}</version>
+			</dependency>
+			<dependency>
+				<groupId>org.postgresql</groupId>
+				<artifactId>postgresql</artifactId>
+				<version>${version.postgresql.jdbc}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>junit</groupId>
+				<artifactId>junit</artifactId>
+				<version>${version.junit}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian</groupId>
+				<artifactId>arquillian-bom</artifactId>
+				<version>${version.arquillian.bom}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-client</artifactId>
+				<version>${version.resteasy_jax_rs_2_0}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jaxb-provider</artifactId>
+				<version>${version.resteasy_jax_rs_2_0}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jaxrs</artifactId>
+				<version>${version.resteasy_jax_rs_2_0}</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-jsapi</artifactId>
+				<version>${version.resteasy_jax_rs_2_0}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.resteasy</groupId>
+				<artifactId>resteasy-multipart-provider</artifactId>
+				<version>${version.resteasy.multipart}</version>
+				<scope>provided</scope>
+			</dependency>
 
+			<dependency>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-rest-client-api</artifactId>
+				<version>${version.arquillian.extension.restclient}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-rest-client-impl-3x</artifactId>
+				<version>${version.arquillian.extension.restclient}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.spec</groupId>
+				<artifactId>jboss-javaee-6.0</artifactId>
+				<version>3.0.3.Final</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.servlet</groupId>
+				<artifactId>javax.servlet-api</artifactId>
+				<version>3.1.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.ws.rs</groupId>
+				<artifactId>javax.ws.rs-api</artifactId>
+				<version>2.0</version>
+				<scope>provided</scope>
+			</dependency>
+			<dependency>
+				<groupId>javax.ejb</groupId>
+				<artifactId>javax.ejb-api</artifactId>
+				<version>3.2</version>
+				<scope>provided</scope>
+			</dependency>
+			<!-- Arquillian Drone -->
+			<dependency>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-drone-bom</artifactId>
+				<version>${version.arquillian_drone}</version>
+				<type>pom</type>
+				<scope>import</scope>
+			</dependency>
+
+			<!-- Arquillian Warp -->
+			<dependency>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-warp-bom</artifactId>
+				<version>${version.arquillian_warp}</version>
+				<scope>import</scope>
+				<type>pom</type>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-rest-warp-api</artifactId>
+				<version>${version.arquillian_warp}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-rest-warp-impl-base</artifactId>
+				<version>${version.arquillian_warp}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-rest-warp-spi</artifactId>
+				<version>${version.arquillian_warp}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<dependency>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-rest-warp-impl-jaxrs-2.0</artifactId>
+				<version>${version.arquillian_warp}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.jboss.arquillian.extension</groupId>
+				<artifactId>arquillian-warp-impl</artifactId>
+				<version>${version.arquillian_warp}</version>
+				<scope>test</scope>
+			</dependency>
+
+			<!-- Test utils -->
+			<dependency>
+				<groupId>org.mockito</groupId>
+				<artifactId>mockito-all</artifactId>
+				<version>${version.mockito}</version>
+				<scope>test</scope>
+			</dependency>
+			<dependency>
+				<groupId>org.easytesting</groupId>
+				<artifactId>fest-assert</artifactId>
+				<version>${version.fest.assert}</version>
+				<scope>test</scope>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
 	<dependencies>
-		<!-- Java EE 7 Specification -->
 		<dependency>
-			<groupId>org.jboss.spec</groupId>
-			<artifactId>jboss-javaee-web-7.0</artifactId>
-			<version>1.0.3.Final</version>
+			<groupId>org.hibernate.javax.persistence</groupId>
+			<artifactId>hibernate-jpa-2.1-api</artifactId>
 			<scope>provided</scope>
-			<type>pom</type>
-			<exclusions>
-				<exclusion>
-					<artifactId>xalan</artifactId>
-					<groupId>org.apache.xalan</groupId>
-				</exclusion>
-			</exclusions>
 		</dependency>
-		
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec.javax.servlet</groupId>
+			<artifactId>jboss-servlet-api_3.1_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec.javax.ws.rs</groupId>
+			<artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec.javax.transaction</groupId>
+			<artifactId>jboss-transaction-api_1.2_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec.javax.ejb</groupId>
+			<artifactId>jboss-ejb-api_3.2_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>javax.enterprise</groupId>
+			<artifactId>cdi-api</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec.javax.xml.soap</groupId>
+			<artifactId>jboss-saaj-api_1.3_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec.javax.xml.ws</groupId>
+			<artifactId>jboss-jaxws-api_2.2_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.spec.javax.xml.bind</groupId>
+			<artifactId>jboss-jaxb-api_2.2_spec</artifactId>
+			<scope>provided</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-client</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxb-provider</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jaxrs</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.resteasy</groupId>
+			<artifactId>resteasy-jsapi</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>org.jboss.resteasy</groupId>
 			<artifactId>resteasy-multipart-provider</artifactId>
-			<version>3.0.8.Final</version>
-			<scope>provided</scope>
 		</dependency>
-		<!-- Query DSL -->
-
+		<dependency>
+			<groupId>org.jboss.logging</groupId>
+			<artifactId>jboss-logging</artifactId>
+		</dependency>
 		<dependency>
 			<groupId>com.mysema.querydsl</groupId>
 			<artifactId>querydsl-apt</artifactId>
-			<version>3.6.4</version>
-			<scope>provided</scope>
 		</dependency>
-
 		<dependency>
 			<groupId>com.mysema.querydsl</groupId>
 			<artifactId>querydsl-jpa</artifactId>
-			<version>3.6.4</version>
-			<exclusions>
-				<exclusion>
-					<groupId>com.google.guava</groupId>
-					<artifactId>guava</artifactId>
-				</exclusion>
-			</exclusions>
 		</dependency>
 		<dependency>
-			<groupId>com.google.guava</groupId>
-			<artifactId>guava</artifactId>
-			<version>17.0</version>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>junit</groupId>
+			<artifactId>junit</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-rest-client-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-rest-client-impl-3x</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.servlet</groupId>
+			<artifactId>javax.servlet-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.ws.rs</groupId>
+			<artifactId>javax.ws.rs-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>javax.ejb</groupId>
+			<artifactId>javax.ejb-api</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.protocol</groupId>
+			<artifactId>arquillian-protocol-servlet</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.junit</groupId>
+			<artifactId>arquillian-junit-container</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.shrinkwrap.resolver</groupId>
+			<artifactId>shrinkwrap-resolver-impl-maven</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-warp-impl</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-rest-warp-api</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-log4j12</artifactId>
-			<version>1.6.1</version>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-rest-warp-impl-base</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-rest-warp-spi</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-rest-warp-impl-jaxrs-2.0</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.mockito</groupId>
+			<artifactId>mockito-all</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.jboss.arquillian.extension</groupId>
+			<artifactId>arquillian-drone-webdriver-depchain</artifactId>
+			<type>pom</type>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
+			<groupId>org.easytesting</groupId>
+			<artifactId>fest-assert</artifactId>
+			<scope>test</scope>
 		</dependency>
 	</dependencies>
-
-	<repositories>
-		<repository>
-			<id>jboss-public-repository</id>
-			<name>JBoss Repository</name>
-			<url>http://repository.jboss.org/nexus/content/groups/public</url>
-		</repository>
-	</repositories>
-
 	<build>
-		<finalName>${project.artifactId}</finalName>
-
-		<plugins>
-			<plugin>
-				<groupId>com.mysema.maven</groupId>
-				<artifactId>apt-maven-plugin</artifactId>
-				<version>1.1.1</version>
-				<executions>
-					<execution>
-						<goals>
-							<goal>process</goal>
-						</goals>
-						<configuration>
-							<outputDirectory>${querydsl.generated.sources}</outputDirectory>
-							<processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<groupId>org.codehaus.mojo</groupId>
-				<artifactId>build-helper-maven-plugin</artifactId>
-				<version>1.8</version>
-				<executions>
-					<execution>
-						<id>add-source</id>
-						<phase>compile</phase>
-						<goals>
-							<goal>add-source</goal>
-						</goals>
-						<configuration>
-							<sources>
-								<source>${querydsl.generated.sources}</source>
-							</sources>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<source>${java.version}</source>
-					<target>${java.version}</target>
-				</configuration>
-			</plugin>
-
-			<plugin>
-				<groupId>org.apache.maven.plugins</groupId>
-				<artifactId>maven-surefire-plugin</artifactId>
-				<version>2.17</version>
-			</plugin>
-
-			<plugin>
-				<artifactId>maven-war-plugin</artifactId>
-				<version>2.4</version>
-				<configuration>
-					<failOnMissingWebXml>false</failOnMissingWebXml>
-				</configuration>
-			</plugin>
-		</plugins>
+		<finalName>${deployment.war.name}</finalName>
+		<testResources>
+			<testResource>
+				<directory>src/test/resources/</directory>
+				<includes>
+					<include>test-persistence.xml</include>
+					<include>wildfly-ds.xml</include>
+					<include>test-postgres-persistence.xml</include>
+					<include>arquillian.xml</include>
+				</includes>
+			</testResource>
+		</testResources>
 		<pluginManagement>
 			<plugins>
 				<plugin>
@@ -166,12 +421,8 @@
 								<pluginExecution>
 									<pluginExecutionFilter>
 										<groupId>org.codehaus.mojo</groupId>
-										<artifactId>
-											build-helper-maven-plugin
-										</artifactId>
-										<versionRange>
-											[1.8,)
-										</versionRange>
+										<artifactId>build-helper-maven-plugin</artifactId>
+										<versionRange>[1.8,)</versionRange>
 										<goals>
 											<goal>add-source</goal>
 										</goals>
@@ -186,6 +437,278 @@
 				</plugin>
 			</plugins>
 		</pluginManagement>
+		<plugins>
+			<plugin>
+				<groupId>com.mysema.maven</groupId>
+				<artifactId>apt-maven-plugin</artifactId>
+				<version>1.1.3</version>
+				<executions>
+					<execution>
+						<goals>
+							<goal>process</goal>
+						</goals>
+						<configuration>
+							<outputDirectory>${querydsl.generated.sources}</outputDirectory>
+							<processor>com.mysema.query.apt.jpa.JPAAnnotationProcessor</processor>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>build-helper-maven-plugin</artifactId>
+				<version>1.9.1</version>
+				<executions>
+					<execution>
+						<id>add-source</id>
+						<phase>compile</phase>
+						<goals>
+							<goal>add-source</goal>
+						</goals>
+						<configuration>
+							<sources>
+								<source>${querydsl.generated.sources}</source>
+							</sources>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+			<plugin>
+				<artifactId>maven-war-plugin</artifactId>
+				<version>${version.war.plugin}</version>
+				<configuration>
+					<failOnMissingWebXml>false</failOnMissingWebXml>
+				</configuration>
+			</plugin>
+			<plugin>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>${version.surefire.plugin}</version>
+				<configuration>
+					<argLine>-Xmx1024m -Xms512m</argLine>
+					<forkMode>always</forkMode>
+					<systemPropertyVariables>
+						<java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+						<jboss.home>${wildfly.home.module}</jboss.home>
+						<module.path>${wildfly.home.module}/modules</module.path>
+						<arquillian.launch>${active.arquillian.qualifier}</arquillian.launch>
+					</systemPropertyVariables>
+					<redirectTestOutputToFile>false</redirectTestOutputToFile>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-failsafe-plugin</artifactId>
+				<version>${version.failsafe.plugin}</version>
+				<configuration>
+					<argLine>-Xmx1024m -Xms512m</argLine>
+					<systemPropertyVariables>
+						<java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
+						<jboss.home>${wildfly.home.module}</jboss.home>
+						<module.path>${wildfly.home.module}/modules</module.path>
+						<arquillian.launch>${active.arquillian.qualifier}</arquillian.launch>
+					</systemPropertyVariables>
+				</configuration>
+				<executions>
+					<execution>
+						<id>integration-test</id>
+						<goals>
+							<goal>integration-test</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>verify</id>
+						<goals>
+							<goal>verify</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
 	</build>
-
+	<profiles>
+		<profile>
+			<activation>
+				<activeByDefault>true</activeByDefault>
+			</activation>
+			<build>
+				<plugins>
+					<plugin>
+						<artifactId>maven-war-plugin</artifactId>
+						<version>${version.war.plugin}</version>
+					</plugin>
+					<plugin>
+						<artifactId>maven-surefire-plugin</artifactId>
+						<version>${version.surefire.plugin}</version>
+						<configuration>
+							<skip>true</skip>
+						</configuration>
+					</plugin>
+				</plugins>
+			</build>
+		</profile>
+		<profile>
+			<id>wildfly_remote_commic</id>
+			<properties>
+				<active.arquillian.qualifier>wildfly_remote_commic</active.arquillian.qualifier>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.wildfly.arquillian</groupId>
+					<artifactId>wildfly-arquillian-container-remote</artifactId>
+					<version>${version.arquillian.wildfly}</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>wildfly_remote</id>
+			<properties>
+				<active.arquillian.qualifier>wildfly_remote</active.arquillian.qualifier>
+			</properties>
+			<dependencies>
+				<dependency>
+					<groupId>org.wildfly.arquillian</groupId>
+					<artifactId>wildfly-arquillian-container-remote</artifactId>
+					<version>${version.arquillian.wildfly}</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>wildfly_managed</id>
+			<properties>
+				<active.arquillian.qualifier>wildfly_managed</active.arquillian.qualifier>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.wildfly.build</groupId>
+						<artifactId>wildfly-server-provisioning-maven-plugin</artifactId>
+						<version>${version.org.wildfly.build-tools}</version>
+						<executions>
+							<execution>
+								<id>server-provisioning</id>
+								<goals>
+									<goal>build</goal>
+								</goals>
+								<phase>process-test-resources</phase>
+								<configuration>
+									<config-file>etc/server-provisioning.xml</config-file>
+									<server-name>wildfly-${version.org.wildfly.full}</server-name>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+					<plugin>
+						<inherited>false</inherited>
+						<groupId>org.apache.maven.plugins</groupId>
+						<artifactId>maven-dependency-plugin</artifactId>
+						<version>${version.dependency.plugin}</version>
+						<executions>
+							<execution>
+								<id>copy-db-driver</id>
+								<phase>process-test-resources</phase>
+								<goals>
+									<goal>copy</goal>
+								</goals>
+								<configuration>
+									<artifactItems>
+										<artifactItem>
+											<groupId>org.postgresql</groupId>
+											<artifactId>postgresql</artifactId>
+											<version>${version.postgresql.jdbc}</version>
+											<outputDirectory>${wildfly.home.module}/standalone/deployments</outputDirectory>
+											<overWrite>true</overWrite>
+											<destFileName>${postgresql.dest.filename}</destFileName>
+										</artifactItem>
+									</artifactItems>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>org.wildfly.arquillian</groupId>
+					<artifactId>wildfly-arquillian-container-managed</artifactId>
+					<version>${version.arquillian.wildfly}</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+		<profile>
+			<id>wildfly_embedded</id>
+			<properties>
+				<active.arquillian.qualifier>wildfly_embedded</active.arquillian.qualifier>
+			</properties>
+			<build>
+				<plugins>
+					<plugin>
+						<groupId>org.wildfly.build</groupId>
+						<artifactId>wildfly-server-provisioning-maven-plugin</artifactId>
+						<version>${version.org.wildfly.build-tools}</version>
+						<executions>
+							<execution>
+								<id>server-provisioning</id>
+								<goals>
+									<goal>build</goal>
+								</goals>
+								<phase>process-test-resources</phase>
+								<configuration>
+									<config-file>etc/server-provisioning.xml</config-file>
+									<server-name>wildfly-${version.org.wildfly.full}</server-name>
+								</configuration>
+							</execution>
+						</executions>
+					</plugin>
+				</plugins>
+			</build>
+			<dependencies>
+				<dependency>
+					<groupId>org.wildfly.arquillian</groupId>
+					<artifactId>wildfly-arquillian-container-embedded</artifactId>
+					<version>${version.arquillian.wildfly}</version>
+					<scope>test</scope>
+				</dependency>
+				<dependency>
+					<groupId>org.wildfly</groupId>
+					<artifactId>wildfly-embedded</artifactId>
+					<version>${version.org.wildfly.full}</version>
+					<scope>test</scope>
+				</dependency>
+			</dependencies>
+		</profile>
+	</profiles>
+	<repositories>
+		<repository>
+			<id>jboss-public</id>
+			<url>http://repository.jboss.org/nexus/content/groups/public</url>
+		</repository>
+		<repository>
+			<id>central</id>
+			<url>http://repo1.maven.org/maven2</url>
+			<releases>
+				<enabled>true</enabled>
+			</releases>
+		</repository>
+	</repositories>
+	<pluginRepositories>
+		<pluginRepository>
+			<id>jboss-public-repository</id>
+			<name>JBoss Plugins</name>
+			<url>http://repository.jboss.org/nexus/content/groups/public</url>
+		</pluginRepository>
+		<pluginRepository>
+			<releases>
+				<updatePolicy>never</updatePolicy>
+			</releases>
+			<snapshots>
+				<enabled>false</enabled>
+			</snapshots>
+			<id>central</id>
+			<name>Central Repository</name>
+			<url>http://repo.maven.apache.org/maven2</url>
+		</pluginRepository>
+	</pluginRepositories>
 </project>

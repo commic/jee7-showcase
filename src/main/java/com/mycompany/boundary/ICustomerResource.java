@@ -3,6 +3,7 @@ package com.mycompany.boundary;
 import java.net.URISyntaxException;
 
 import javax.ejb.Stateless;
+import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
@@ -46,6 +47,8 @@ import com.mycompany.entity.Customer;
  *  Weitere Informationen finden Sie im JavaDoc der einzelnen Methoden.
  */
 @Path("/customer")
+@Consumes({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
+@Produces({MediaType.APPLICATION_JSON, MediaType.APPLICATION_XML})
 @Stateless
 public interface ICustomerResource {
 
@@ -66,7 +69,7 @@ public interface ICustomerResource {
 	 * @throws URISyntaxException
 	 */
 	@POST
-	Response saveCustomer(@Context UriInfo uriInfo, Customer customer) throws URISyntaxException;
+	Response saveCustomer(Customer customer) throws URISyntaxException;
 
 	/**
 	 * Diese Methode findet einen Kunden mit einer gewissen ID (R from CRUD). 
@@ -84,7 +87,6 @@ public interface ICustomerResource {
 	 */
 	@GET
 	@Path("/" + CUSTOMER_ID)
-	@Produces(MediaType.APPLICATION_JSON)
 	Response findCustomerById(@PathParam(value = CUSTOMER_ID_PLAIN) String customerId);
 
 	/**
@@ -120,7 +122,6 @@ public interface ICustomerResource {
 	 * 
 	 */
 	@GET
-	@Produces(MediaType.APPLICATION_JSON)
 	Response findCustomers(@QueryParam("searchString") String searchString);
 	
 	/**
@@ -135,7 +136,6 @@ public interface ICustomerResource {
 	 * @throws URISyntaxException 
 	 */
 	@PUT
-	@Path("/" + CUSTOMER_ID)
 	Response updateCustomer(Customer customer) throws URISyntaxException;
 
 	/**
@@ -151,14 +151,4 @@ public interface ICustomerResource {
 	@DELETE
 	@Path("/" + CUSTOMER_ID)
 	Response deleteCustomer(@PathParam(CUSTOMER_ID_PLAIN) Long customerId);
-	
-	/**
-	 * Einfache Testmethode um die Verfügbarkeit des Services zu überprüfen.
-	 * 
-	 * @return Eine einfache Zeichenkette z.B. "Hello Java EE!"
-	 */
-	@GET
-	@Path("/hello/{name}")
-	@Produces(MediaType.TEXT_PLAIN)
-	public abstract Response sayHello(@PathParam("name") String name, @QueryParam("nachname")String nachname);
 }

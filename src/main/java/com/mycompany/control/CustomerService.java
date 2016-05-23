@@ -11,6 +11,7 @@ import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
@@ -30,6 +31,7 @@ public class CustomerService {
     @Inject
     private Validator validator;
 	
+    @Transactional
 	public void saveCustomer(Customer customer) throws ValidationException {
 		Set<ConstraintViolation<Customer>> violations = validator.validate(customer);
 		if(violations.size() == 0) {
@@ -75,22 +77,6 @@ public class CustomerService {
 			throw new ValidationException(extractViolationMessages(violations));			
 		}
 	}
-	
-	private String[] splitSearchString(String searchString) {
-		String[] searchTerms = new String[] { searchString };
-		if (searchString.contains(", ")) {
-			searchTerms = searchString.split(", ");
-		} else if (searchString.contains("; ")) {
-			searchTerms = searchString.split("; ");
-		} else if (searchString.contains(",")) {
-			searchTerms = searchString.split(",");
-		} else if (searchString.contains(";")) {
-			searchTerms = searchString.split(";");
-		} else if (searchString.contains(" ")) {
-			searchTerms = searchString.split(" ");
-		}
-		return searchTerms;
-	}
 
 	/**
 	 * Standard-JPA-Query
@@ -122,7 +108,7 @@ public class CustomerService {
 	*/
 	
 	public List<Customer> findCustomers(String searchString) {
-		String[] searchTerms = splitSearchString(searchString);
+		String[] searchTerms = ServiceUtils.splitSearchString(searchString);
 		QCustomer qCustomer = QCustomer.customer;
 		JPAQuery query = new JPAQuery(entityManager);
 		BooleanBuilder builder = new BooleanBuilder();

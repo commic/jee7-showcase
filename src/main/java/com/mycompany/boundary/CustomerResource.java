@@ -5,10 +5,12 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.ejb.EJB;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
 import javax.ws.rs.core.UriInfo;
 
+import com.mycompany.control.CompanyService;
 import com.mycompany.control.CustomerService;
 import com.mycompany.control.ValidationException;
 import com.mycompany.entity.Customer;
@@ -17,6 +19,9 @@ public class CustomerResource implements ICustomerResource {
 
 	@EJB
 	private CustomerService customerService;
+	
+	@EJB
+	private CompanyService companyService;
 
 	/*
 	 * (non-Javadoc)
@@ -44,13 +49,13 @@ public class CustomerResource implements ICustomerResource {
 	 * .UriInfo, com.mycompany.entity.Customer)
 	 */
 	@Override
-	public Response saveCustomer(UriInfo uriInfo, Customer customer) throws URISyntaxException{
+	public Response saveCustomer(Customer customer) throws URISyntaxException{
 		try {
 			customerService.saveCustomer(customer);
 		}catch(ValidationException e){
 			e.printViolations();
 		}
-		return Response.created(new URI(uriInfo.getRequestUri() + "/" + customer.getId())).build();
+		return Response.created(URI.create("/customer/" + customer.getId())).build();
 	}
 
 	/*
@@ -94,9 +99,4 @@ public class CustomerResource implements ICustomerResource {
 		customerService.deleteCustomer(customerId);
 		return Response.ok().build();
 	}
-
-	@Override
-	public Response sayHello(String name, String nachname) {
-		return Response.ok("Hello  world, Hello " + name + " " + nachname).build();
-	}	
 }

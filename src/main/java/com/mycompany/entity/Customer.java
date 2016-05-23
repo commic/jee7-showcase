@@ -3,13 +3,10 @@ package com.mycompany.entity;
 import java.util.Date;
 import java.util.Locale;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
@@ -24,7 +21,6 @@ import com.mycompany.entity.constraint.Email;
  * 
  */
 @Entity
-@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 public class Customer {
 
 	@Id
@@ -49,7 +45,8 @@ public class Customer {
 	private String country;
 	private Locale locale;
 	private Date createDate;
-	@ManyToOne(cascade = { CascadeType.ALL })
+	
+	@ManyToOne
 	@NotNull(message = "Company darf nicht leer sein")
 	private Company company;
 
