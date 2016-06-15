@@ -45,6 +45,26 @@ angular.module('CrmDemo.controllers',[]).controller('CustomerDetailCtrl',['$scop
             });
         }
     };
+}]).controller('CompanyDetailCtrl',['$scope','$location', '$routeParams','Company', function ($scope, $location, $routeParams, Company) {
+	if ($location.path() === "/company/new") {
+        $scope.company = {};
+    } else {
+        $scope.company = Company.get({
+            id : $routeParams.companyId
+        });
+    }
+
+    $scope.save = function() {
+        if (!!$scope.company.id) {
+            Company.update($scope.company, function(company) {
+                $location.path('/company/list');
+            });
+        } else {
+            Company.save($scope.company, function(company) {
+                $location.path('/company/list');
+            });
+        }
+    };
 }]).controller('ProductCategoryDetailCtrl',['$scope','$location', '$routeParams','ProductCategory', function ($scope, $location, $routeParams, ProductCategory) {
 	if ($location.path() === "/category/new") {
         $scope.category = {};
@@ -167,6 +187,42 @@ angular.module('CrmDemo.controllers',[]).controller('CustomerDetailCtrl',['$scop
         $scope.searchString = null;
         $scope.filteredResults = false;
         $scope.categories = ProductCategory.query();
+    };
+
+}]).controller('CompanyListCtrl',['$scope','Company', function ($scope, Company) {
+
+    $scope.companies = Company.query();
+    $scope.filteredResults = false;
+
+    $scope.search = function() {
+        $scope.companies = Company.query(
+            {
+                searchString: $scope.searchString
+            },
+            function() {
+                $scope.filteredResults = true;
+            }
+        );
+    };
+    
+    $scope.deleteCompany = function(companyId) {
+        Company.delete(
+            {
+                id: companyId
+            },
+            function() {
+                if(!!$scope.searchString && !!$scope.filteredResults) {
+                    $scope.search();
+                } else {
+                    $scope.companies = Company.query();
+                }
+            });
+    };
+
+    $scope.clearSearch = function() {
+        $scope.searchString = null;
+        $scope.filteredResults = false;
+        $scope.companies = Company.query();
     };
 
 }]);

@@ -2,7 +2,7 @@
 
 <div class="row">
 	<div class="col-md-12">
-		<h2>Category Overview</h2>
+		<h2>Company Overview</h2>
 	</div>
 	<div class="col-md-6">
 		<form class="form-inline">
@@ -11,7 +11,7 @@
 				class="btn btn-primary"><span style="margin-right: 5px;" class="glyphicon glyphicon-search"></span>Search</button>
 			<button ng-click="clearSearch()" ng-disabled="!filteredResults"
 				type="submit" class="btn btn-default">Clear</button>
-			<a href="#/category/new" class="btn btn-default">New category</a>
+			<a class="btn btn-default" href="#/company/new">New company</a>
 		</form>
 	</div>
 </div>
@@ -21,16 +21,17 @@
 			<thead>
 				<tr>
 					<th>#</th>
-					<th>Category name</th>
+					<th>Company name</th>
 					<th colspan="2">Options</th>
 				</tr>
 			</thead>
 			<tbody>
-				<tr ng-repeat="category in categories">
-					<td>{{category.id}}</td>
-					<td>{{category.name}}</td>                    
-					<td><a href="#/category/edit/{{category.id}}" title="edit" class="btn btn-xs btn-default"><i
-							class="glyphicon glyphicon-edit"></i></a></td>
+				<tr ng-repeat="company in companies">
+					<td>{{company.id}}</td>
+					<td>{{company.name}}</td>                    
+					<td><a href="#/company/edit/{{company.id}}" title="edit" class="btn btn-xs btn-default"><i
+							class="glyphicon glyphicon-edit"></i></a><a class="btn btn-xs btn-default" ng-click="deleteCompany(company.id)"
+						title="delete"><i class="glyphicon glyphicon-remove"></i></a></td>
 				</tr>
 			</tbody>
 		</table>

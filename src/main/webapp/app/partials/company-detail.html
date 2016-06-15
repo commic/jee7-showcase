@@ -1,0 +1,30 @@
+<!-- partial for the customer detail page for creating, updating and displaying companies -->
+
+<form class="form-horizontal" method="post"
+	enctype="multipart/form-data" style="margin-top: 30px;">
+	<div class="row">
+		<div class="col-md-6">
+			<fieldset>
+				<legend ng-show="!!company.id">
+					Edit: {{ company.name }}<span class="subtle_text">#{{company.id}}</span>
+				</legend>
+
+				<legend ng-show="!company.id">Create company</legend>
+
+				<div class="control-group">
+					<label class="control-label">Name</label>
+					<div class="controls">
+						<input name="companyName" type="text" ng-model="company.name" class="form-control">
+					</div>
+				</div>
+				<div class="control-group" style="margin-top: 20px;">
+					<div class="controls">
+						<button ng-click="save()" class="btn btn-primary"><span style="margin-right: 5px;" class="glyphicon glyphicon-save"></span>Save</button>
+						<a href="#/company/list" class="btn btn-default"><span style="margin-right: 5px;" class="glyphicon glyphicon-log-out"></span>Cancel</a>
+					</div>
+				</div>
+
+			</fieldset>
+		</div>
+	</div>
+</form>

@@ -6,7 +6,7 @@ import javax.ejb.Stateless;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
-import javax.ws.rs.PUT;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -93,18 +93,20 @@ public interface ICompanyResource {
 	Response findCompanies(@QueryParam("searchString") String searchString);
 	
 	/**
-	 * Diese Methode aktualisiert einen Kunden (U from CRUD). 
-	 * Es soll bei einem erfolgreichem Loeschvorgang der HTTP Statuscode 200 zurueckgegeben werden:
+	 * Diese Methode dient zum Speichern einer Company (C from CRUD).
+	 * HTTP 201 (welche die erfolgreiche Erstellung einer Resource repraesentiert) kann wie folgt zurueckgegeben werden:
 	 * <p><code>
-	 * Response.status(Status.ACCEPTED).build()
+	 * Response.created(new URI(uriInfo.getRequestUri() + "/" + customer.getId())) <br/>
+			   .build();<br/>
 	 * </code></p>
 	 * 
-	 * @param customer Der zu aktualisierende Kunde als Java-Objekt
-	 * @return HTTP Code 202
-	 * @throws URISyntaxException 
+	 * @param uriInfo Informationen zur aufgerufenen URL des Erstellers	
+	 * @param company Die zu erstellende Company
+	 * @return HTTP 201 
+	 * @throws URISyntaxException
 	 */
-	@PUT
-	Response updateCompany(Company company) throws URISyntaxException;
+	@POST
+	Response saveCompany(Company company) throws URISyntaxException;
 
 	/**
 	 * Diese Methode loescht einen Kunden (D from CRUD).

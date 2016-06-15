@@ -38,27 +38,39 @@ angular.module('CrmDemo.services', [ 'ngResource' ]).value('Debouncer', {
 	});
 	return Customer;
 }).factory('Product', function($resource) {
-var Product = $resource(
+	var Product = $resource(
 
-		"http://localhost\\:8080/" + MODULE_NAME + "/rest/product/:id", {
-			id : '@id'
-		}, {
-			update : {
-				method : 'PUT'
-			}
-		});
-
-		return Product;
-	}).factory('ProductCategory', function($resource) {
-		var ProductCategory = $resource(
-
-		"http://localhost\\:8080/" + MODULE_NAME + "/rest/category/:id", {
-			id : '@id'
-		}, {
-			update : {
-				method : 'PUT'
-			}
-		});
-
-		return ProductCategory;
+	"http://localhost\\:8080/" + MODULE_NAME + "/rest/product/:id", {
+		id : '@id'
+	}, {
+		update : {
+			method : 'PUT'
+		}
 	});
+
+	return Product;
+}).factory('ProductCategory', function($resource) {
+	var ProductCategory = $resource(
+
+	"http://localhost\\:8080/" + MODULE_NAME + "/rest/category/:id", {
+		id : '@id'
+	}, {
+		update : {
+			method : 'PUT'
+		}
+	});
+
+	return ProductCategory;
+}).factory('Company', function($resource) {
+	var Company = $resource(
+
+	"http://localhost\\:8080/" + MODULE_NAME + "/rest/company/:id", {
+		id : '@id'
+	}, {
+		update : {
+			method : 'POST'
+		}
+	});
+
+	return Company;
+});

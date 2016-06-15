@@ -1,11 +1,11 @@
 package com.mycompany.boundary;
 
+import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ws.rs.core.Response;
-import javax.ws.rs.core.Response.Status;
 
 import com.mycompany.control.CompanyService;
 import com.mycompany.control.ValidationException;
@@ -21,17 +21,28 @@ public class CompanyResource implements ICompanyResource {
 		Company company = companyService.findCompanyById(Long.parseLong(companyId));
 		return Response.ok().entity(company).build();
 	}
-
+	
+	/*
+	 * (non-Javadoc)
+	 * 
+	 * @see
+	 * com.mycompany.boundary.ICompanyResource#saveCompany(javax.ws.rs.core
+	 * .UriInfo, com.mycompany.entity.Company)
+	 */
 	@Override
-	public Response updateCompany(Company company) throws URISyntaxException {
-		try{
-			companyService.updateCompany(company);
-			}catch(ValidationException e) {
-				
+	public Response saveCompany(Company company) throws URISyntaxException{
+		try {
+			if(company.getId() != null) {
+				companyService.updateCompany(company);
+			}else{
+				companyService.saveCompany(company);
 			}
-			return Response.status(Status.ACCEPTED).build();
+		}catch(ValidationException e){
+			e.printViolations();
+		}
+		return Response.created(URI.create("/company/" + company.getId())).build();
 	}
-
+	
 	@Override
 	public Response deleteCompany(Long companyId) {
 		companyService.deleteCompany(companyId);
