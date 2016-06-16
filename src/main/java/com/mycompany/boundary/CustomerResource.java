@@ -5,10 +5,8 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 import javax.ejb.EJB;
-import javax.ws.rs.core.Context;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.Response.Status;
-import javax.ws.rs.core.UriInfo;
 
 import com.mycompany.control.CompanyService;
 import com.mycompany.control.CustomerService;
@@ -66,8 +64,8 @@ public class CustomerResource implements ICustomerResource {
 	 * )
 	 */
 	@Override
-	public Response findCustomerById(String customerId) {
-		Customer customer = customerService.findCustomerById(Long.parseLong(customerId));
+	public Response findCustomerById(Long customerId) {
+		Customer customer = customerService.findCustomerById(customerId);
 		return Response.ok().entity(customer).build();
 	}
 

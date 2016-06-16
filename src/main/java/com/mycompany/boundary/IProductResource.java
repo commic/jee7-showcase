@@ -34,7 +34,7 @@ public interface IProductResource {
 	@GET
 	@Path("/{productId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Response findProductById(@PathParam(value = "productId") String productId);
+	Response findProductById(@PathParam(value = "productId") Long productId);
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

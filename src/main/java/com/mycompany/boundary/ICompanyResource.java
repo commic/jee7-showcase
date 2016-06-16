@@ -7,6 +7,7 @@ import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
+import javax.ws.rs.PUT;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -55,7 +56,7 @@ public interface ICompanyResource {
 	
 	@GET
 	@Path("/" + COMPANY_ID)
-	Response findCompanyById(@PathParam(value = COMPANY_ID_PLAIN) String compamyId);
+	Response findCompanyById(@PathParam(value = COMPANY_ID_PLAIN) Long compamyId);
 
 	/**
 	 * <p>Diese Methode dient dem Auffinden von Kunden, welchen einem oder mehreren Kriterien entsprechen.
@@ -91,6 +92,21 @@ public interface ICompanyResource {
 	 */
 	@GET
 	Response findCompanies(@QueryParam("searchString") String searchString);
+	
+	/**
+	 * Diese Methode aktualisiert eine Company (U from CRUD). 
+	 * Es soll bei einem erfolgreichem Updatevorgang der HTTP Statuscode 200 zurueckgegeben werden:
+	 * <p><code>
+	 * Response.status(Status.ACCEPTED).build()
+	 * </code></p>
+	 * 
+	 * @param company Die zu aktualisierende Company als Java-Objekt
+	 * @return HTTP Code 202
+	 * @throws URISyntaxException 
+	 */
+	@PUT
+	@Path("/" + COMPANY_ID)
+	Response updateCompany(Company company) throws URISyntaxException;
 	
 	/**
 	 * Diese Methode dient zum Speichern einer Company (C from CRUD).

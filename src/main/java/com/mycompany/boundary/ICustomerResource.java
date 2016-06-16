@@ -87,7 +87,7 @@ public interface ICustomerResource {
 	 */
 	@GET
 	@Path("/" + CUSTOMER_ID)
-	Response findCustomerById(@PathParam(value = CUSTOMER_ID_PLAIN) String customerId);
+	Response findCustomerById(@PathParam(value = CUSTOMER_ID_PLAIN) Long customerId);
 
 	/**
 	 * <p>Diese Methode dient dem Auffinden von Kunden, welchen einem oder mehreren Kriterien entsprechen.
@@ -136,6 +136,7 @@ public interface ICustomerResource {
 	 * @throws URISyntaxException 
 	 */
 	@PUT
+	@Path("/" + CUSTOMER_ID)
 	Response updateCustomer(Customer customer) throws URISyntaxException;
 
 	/**

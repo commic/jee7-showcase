@@ -29,7 +29,7 @@ public interface IProductCategoryResource {
 	@GET
 	@Path("/{categoryId}")
 	@Produces(MediaType.APPLICATION_JSON)
-	Response findProductCategoryById(@PathParam(value = "categoryId") String categoryId);
+	Response findProductCategoryById(@PathParam(value = "categoryId") Long categoryId);
 	
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)

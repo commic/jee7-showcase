@@ -25,9 +25,8 @@ public class ProductCategoryResource implements IProductCategoryResource {
 	}
 
 	@Override
-	public Response findProductCategoryById(String categoryId) {
-		ProductCategory category = categoryService.findProductById(Long
-				.parseLong(categoryId));
+	public Response findProductCategoryById(Long categoryId) {
+		ProductCategory category = categoryService.findProductById(categoryId);
 
 		if (category != null) {
 			return Response.ok().entity(category).build();

@@ -6,6 +6,7 @@ import java.util.List;
 
 import javax.ejb.EJB;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.Response.Status;
 
 import com.mycompany.control.CompanyService;
 import com.mycompany.control.ValidationException;
@@ -17,8 +18,8 @@ public class CompanyResource implements ICompanyResource {
 	private CompanyService companyService;
 
 	@Override
-	public Response findCompanyById(String companyId) {
-		Company company = companyService.findCompanyById(Long.parseLong(companyId));
+	public Response findCompanyById(Long companyId) {
+		Company company = companyService.findCompanyById(companyId);
 		return Response.ok().entity(company).build();
 	}
 	
@@ -41,6 +42,16 @@ public class CompanyResource implements ICompanyResource {
 			e.printViolations();
 		}
 		return Response.created(URI.create("/company/" + company.getId())).build();
+	}
+	
+	@Override
+	public Response updateCompany(Company company) {
+		try{
+		companyService.updateCompany(company);
+		}catch(ValidationException e) {
+			
+		}
+		return Response.status(Status.ACCEPTED).build();
 	}
 	
 	@Override

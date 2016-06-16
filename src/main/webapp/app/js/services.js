@@ -68,7 +68,7 @@ angular.module('CrmDemo.services', [ 'ngResource' ]).value('Debouncer', {
 		id : '@id'
 	}, {
 		update : {
-			method : 'POST'
+			method : 'PUT'
 		}
 	});
 

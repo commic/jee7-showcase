@@ -56,9 +56,8 @@ public class ProductResource implements IProductResource{
 		return Response.ok(products).build();
 	}
 
-	public Response findProductById(String productId) {
-		GasProduct product = gasProductService.findGasProductById(Long
-				.parseLong(productId));
+	public Response findProductById(Long productId) {
+		GasProduct product = gasProductService.findGasProductById(productId);
 
 		if (product != null) {
 			return Response.ok().entity(product).build();
