@@ -57,7 +57,9 @@
 				<div class="control-group">
 					<label class="control-label">Company</label>
 					<div class="controls">
-						<input type="text" ng-model="customer.company.name" class="form-control">
+						<select name="companySelect" ng-model="selectedCompanyId">
+					      <option class="form-control" ng-repeat="company in companies" value="{{company.id}}">{{company.name}}</option>
+					    </select>
 					</div>
 				</div>
 
