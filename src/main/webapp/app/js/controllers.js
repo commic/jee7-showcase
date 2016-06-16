@@ -11,14 +11,10 @@ angular.module('CrmDemo.controllers',[]).controller('CustomerDetailCtrl',['$scop
         $scope.customer = Customer.get({
             id : $routeParams.customerId
         });
-        $scope.customer.$promise.then(function(result){
-        	$scope.selectedCompanyId = result.company.id;
-        });
     }
 
     $scope.save = function() {
-    	selectCompany();
-        if (!!$scope.customer.id && $scope.customer.company !== undefined) {
+    	if (!!$scope.customer.id && $scope.customer.company !== undefined) {
             Customer.update($scope.customer, function(customer) {
                 $location.path('/customer/list');
             });
@@ -27,15 +23,7 @@ angular.module('CrmDemo.controllers',[]).controller('CustomerDetailCtrl',['$scop
                 $location.path('/customer/list');
             });
         }
-    };
-    var selectCompany = function(){
-    	angular.forEach($scope.companies, function(element){
-    		if(element.id === parseInt($scope.selectedCompanyId)) {
-    			$scope.customer.company = element;
-    		}
-    	});
-    }
-    
+    };    
 }]).controller('ProductDetailCtrl',['$scope','$location', '$routeParams','Product','ProductCategory', function ($scope, $location, $routeParams, Product, ProductCategory) {
 	$scope.productCategories = ProductCategory.query();
     if ($location.path() === "/product/new") {

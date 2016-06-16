@@ -53,16 +53,14 @@
 						<input type="text" ng-model="customer.phone" class="form-control">
 					</div>
 				</div>
-
 				<div class="control-group">
 					<label class="control-label">Company</label>
 					<div class="controls">
-						<select name="companySelect" ng-model="selectedCompanyId">
-					      <option class="form-control" ng-repeat="company in companies" value="{{company.id}}">{{company.name}}</option>
+					    <select class="form-control" ng-options="company.name for company in companies track by company.id" ng-model="customer.company">
 					    </select>
 					</div>
 				</div>
-
+				
 				<div class="control-group" style="margin-top: 20px;">
 					<div class="controls">
 						<button ng-click="save()" class="btn btn-primary"><span style="margin-right: 5px;" class="glyphicon glyphicon-save"></span>Save</button>
