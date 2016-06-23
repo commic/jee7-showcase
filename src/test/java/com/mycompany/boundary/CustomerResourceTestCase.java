@@ -77,4 +77,34 @@ public class CustomerResourceTestCase {
         Response response = customerResource.saveCustomer(customer);
         assertEquals("The request didn't succeeded.", Response.Status.CREATED.getStatusCode(), response.getStatus());
     }
+    
+    @Test
+    @InSequence(2)
+    public void testUpdateCustomer(@ArquillianResteasyResource("rest") ICustomerResource customerResource, @ArquillianResteasyResource("rest") ICompanyResource companyResource) throws URISyntaxException {
+    	Response customersResponse = customerResource.findCustomers("Mustermann");
+    	List<Customer> customers = (List<Customer>)customersResponse.getEntity();
+    	assertEquals("Size of Customers is not correct.", 1, customers.size());
+    	Customer customer = customers.get(0);
+    	Long id = customer.getId();
+    	customer.setSurname("Liebermann");
+    	Response response = customerResource.updateCustomer(customer);
+        Response customerResponse = customerResource.findCustomerById(id);
+        Customer customerUpdated = (Customer)customerResponse.getEntity();
+        assertEquals("Updated customer is not correct.", "Liebermann", customer.getSurname());
+    }
+    
+    @Test
+    @InSequence(3)
+    public void testDeleteCustomer(@ArquillianResteasyResource("rest") ICustomerResource customerResource, @ArquillianResteasyResource("rest") ICompanyResource companyResource) throws URISyntaxException {
+    	Response customersResponse = customerResource.findCustomers("Liebermann");
+    	List<Customer> customers = (List<Customer>)customersResponse.getEntity();
+    	assertEquals("Size of Customers is not correct.", 1, customers.size());
+    	Customer customer = customers.get(0);
+    	Long id = customer.getId();
+    	customerResource.deleteCustomer(id);
+    	Response customersResponse2 = customerResource.findCustomers("Liebermann");
+    	List<Customer> customers2 = (List<Customer>)customersResponse2.getEntity();
+        assertEquals("Delete did not work.", 0, customers2.size());
+    }
+    
 }

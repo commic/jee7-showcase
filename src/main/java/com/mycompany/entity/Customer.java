@@ -35,7 +35,7 @@ public class Customer {
 	@NotNull(message = "Der Nachname darf nicht leer sein")
 	@Size(min = 2, message = "Bitte mindestens 2 Buchstaben eingeben")
 	@Pattern(regexp = "^[A-Z][a-z]+(?:[\\s-][A-Z][a-z]+)*", message = "Bitte einen gültigen Nachnamen eingeben")
-	private String lastName;
+	private String surname;
 	@NotNull(message = "Die E-Mail-Adresse darf nicht leer sein")
 	@Email(message = "Bitte geben Sie eine gültige E-Mail-Adresse ein")
 	private String email;
@@ -56,14 +56,13 @@ public class Customer {
 	/**
 	 * Default constructor for JAX-RS (object <> JSON serialization)
 	 */
-	public Customer() {
-	}
+	public Customer() {}
 
 	public Customer(String firstName, String lastName, String email,
 			String phone, String fax, Sex sex, String country, Locale locale,
 			Date createDate, Company company) {
 		this.firstName = firstName;
-		this.lastName = lastName;
+		this.surname = lastName;
 		this.email = email;
 		this.phone = phone;
 		this.fax = fax;
@@ -92,12 +91,12 @@ public class Customer {
 		this.firstName = firstName;
 	}
 
-	public String getLastName() {
-		return lastName;
+	public String getSurname() {
+		return surname;
 	}
 
-	public void setLastName(String lastName) {
-		this.lastName = lastName;
+	public void setSurname(String lastName) {
+		this.surname = lastName;
 	}
 
 	public String getEmail() {

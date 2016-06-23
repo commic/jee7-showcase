@@ -81,7 +81,7 @@ public class CustomerResource implements ICustomerResource {
 		try{
 		customerService.updateCustomer(customer);
 		}catch(ValidationException e) {
-			
+			Response.status(Status.CONFLICT).build();
 		}
 		return Response.status(Status.ACCEPTED).build();
 	}

@@ -6,7 +6,7 @@
 
 			<fieldset>
 				<legend ng-show="!!customer.id">
-					Edit: {{ customer.firstName }} {{ customer.lastName }} <span
+					Edit: {{ customer.firstName }} {{ customer.surname }} <span
 						class="subtle_text"> # {{customer.id}}, created {{
 						customer.createDate | date }}</span>
 				</legend>
@@ -23,7 +23,7 @@
 				<div class="control-group">
 					<label class="control-label" for="inputName">Last name</label>
 					<div class="controls">
-						<input id="inputName" type="text" ng-model="customer.lastName"
+						<input id="inputName" type="text" ng-model="customer.surname"
 							class="form-control">
 					</div>
 				</div>

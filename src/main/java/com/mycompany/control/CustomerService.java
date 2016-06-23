@@ -16,6 +16,9 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import com.mycompany.entity.Customer;
+import com.mycompany.entity.QCustomer;
+import com.mysema.query.BooleanBuilder;
+import com.mysema.query.jpa.impl.JPAQuery;
 
 @Stateless
 @Local
@@ -81,6 +84,7 @@ public class CustomerService {
 	 * @param searchString: John - John Smith
 	 * @return
 	 */
+	/*
 	public List<Customer> findCustomers(String searchString) {
 		String queryString = "SELECT e FROM Customer e where";
 		int i = 0;
@@ -90,9 +94,9 @@ public class CustomerService {
 			String[] searchParams = ServiceUtils.splitSearchString(searchString);
 			for(String s: searchParams) {
 				if(searchParams.length-1 == i) {
-					queryString += " e.firstName ='" + s + "'";
+					queryString += " e.firstName ='" + s + "' or e.lastName='" + s + "'";
 				}else{
-					queryString += " e.firstName ='" + s + "' or";
+					queryString += " e.firstName ='" + s + "' or e.lastName='" + s + "' or";
 				}
 				i++;
 			}
@@ -101,8 +105,8 @@ public class CustomerService {
 				Customer.class);
 		return query.getResultList();
 	}
+	*/
 	
-	/*
 	public List<Customer> findCustomers(String searchString) {
 		String[] searchTerms = ServiceUtils.splitSearchString(searchString);
 		QCustomer qCustomer = QCustomer.customer;
@@ -111,11 +115,12 @@ public class CustomerService {
 		for (String term : searchTerms) {
 			builder.or(qCustomer.firstName.contains(term));
 			builder.or(qCustomer.company.name.contains(term));
-			builder.or(qCustomer.lastName.contains(term));
+			builder.or(qCustomer.surname.contains(term));
+			builder.or(qCustomer.email.contains(term));
 		}
 		return query.from(qCustomer).where(builder).list(qCustomer);
 	}
-	*/
+	
 
 	public void deleteCustomer(Long id) {
 		Customer customer = findCustomerById(id);
