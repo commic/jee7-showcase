@@ -4,6 +4,8 @@ import java.util.Date;
 import java.util.Locale;
 
 import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -41,12 +43,13 @@ public class Customer {
 	private String phone;
 	//@Phone(message = "Bitte geben Sie eine gültige Faxnummer ein")
 	private String fax;
+	@Enumerated(EnumType.ORDINAL)
 	private Sex sex;
 	private String country;
 	private Locale locale;
 	private Date createDate;
 	
-	@ManyToOne
+	@ManyToOne(optional=false)
 	@NotNull(message = "Company darf nicht leer sein")
 	private Company company;
 
@@ -54,7 +57,6 @@ public class Customer {
 	 * Default constructor for JAX-RS (object <> JSON serialization)
 	 */
 	public Customer() {
-
 	}
 
 	public Customer(String firstName, String lastName, String email,

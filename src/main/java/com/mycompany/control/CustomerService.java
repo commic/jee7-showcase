@@ -16,9 +16,6 @@ import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
 import com.mycompany.entity.Customer;
-import com.mycompany.entity.QCustomer;
-import com.mysema.query.BooleanBuilder;
-import com.mysema.query.jpa.impl.JPAQuery;
 
 @Stateless
 @Local
@@ -84,14 +81,13 @@ public class CustomerService {
 	 * @param searchString: John - John Smith
 	 * @return
 	 */
-	/*
 	public List<Customer> findCustomers(String searchString) {
 		String queryString = "SELECT e FROM Customer e where";
 		int i = 0;
 		if(searchString == null || searchString.isEmpty()) {
 			queryString = "SELECT e FROM Customer e";
 		}else{
-			String[] searchParams = splitSearchString(searchString);
+			String[] searchParams = ServiceUtils.splitSearchString(searchString);
 			for(String s: searchParams) {
 				if(searchParams.length-1 == i) {
 					queryString += " e.firstName ='" + s + "'";
@@ -105,8 +101,8 @@ public class CustomerService {
 				Customer.class);
 		return query.getResultList();
 	}
-	*/
 	
+	/*
 	public List<Customer> findCustomers(String searchString) {
 		String[] searchTerms = ServiceUtils.splitSearchString(searchString);
 		QCustomer qCustomer = QCustomer.customer;
@@ -119,6 +115,7 @@ public class CustomerService {
 		}
 		return query.from(qCustomer).where(builder).list(qCustomer);
 	}
+	*/
 
 	public void deleteCustomer(Long id) {
 		Customer customer = findCustomerById(id);
