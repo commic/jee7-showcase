@@ -1,7 +1,7 @@
 'use strict';
 
-angular.module('CrmDemo.controllers',[]).controller('CustomerDetailCtrl',['$scope','$location', '$routeParams','Customer', function ($scope, $location, $routeParams, Customer) {
-
+angular.module('CrmDemo.controllers',[]).controller('CustomerDetailCtrl',['$scope','$location', '$routeParams','Customer','Company', function ($scope, $location, $routeParams, Customer, Company) {
+	$scope.companies = Company.query();
     if ($location.path() === "/customer/new") {
         $scope.customer = {
             createDate : new Date(),
@@ -14,7 +14,7 @@ angular.module('CrmDemo.controllers',[]).controller('CustomerDetailCtrl',['$scop
     }
 
     $scope.save = function() {
-        if (!!$scope.customer.id) {
+    	if (!!$scope.customer.id && $scope.customer.company !== undefined) {
             Customer.update($scope.customer, function(customer) {
                 $location.path('/customer/list');
             });
@@ -23,7 +23,7 @@ angular.module('CrmDemo.controllers',[]).controller('CustomerDetailCtrl',['$scop
                 $location.path('/customer/list');
             });
         }
-    };
+    };    
 }]).controller('ProductDetailCtrl',['$scope','$location', '$routeParams','Product','ProductCategory', function ($scope, $location, $routeParams, Product, ProductCategory) {
 	$scope.productCategories = ProductCategory.query();
     if ($location.path() === "/product/new") {
