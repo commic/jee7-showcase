@@ -3,11 +3,18 @@ package com.mycompany.control;
 import java.util.List;
 import java.util.Set;
 
+import javax.annotation.Resource;
 import javax.ejb.Local;
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.inject.Inject;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Transport;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -15,6 +22,10 @@ import javax.transaction.Transactional;
 import javax.validation.ConstraintViolation;
 import javax.validation.Validator;
 
+import org.apache.log4j.Level;
+import org.apache.log4j.Logger;
+
+import com.mycompany.boundary.CustomerResource;
 import com.mycompany.entity.Customer;
 import com.mycompany.entity.QCustomer;
 import com.mysema.query.BooleanBuilder;
@@ -30,6 +41,27 @@ public class CustomerService {
 	// Get configured validator directly from JBoss AS 7 environment
     @Inject
     private Validator validator;
+    
+    @Resource(name = "java:jboss/mail/Default")
+    private Session session;
+
+    /**
+     * Senden einer E-Mail über die Mail-Session des Applikationscontainers
+     * @param addresses E-Mail-Adressen
+     * @param topic Betreff
+     * @param textMessage Textnachricht
+     */
+    public void send(String addresses, String topic, String textMessage) {
+        try {
+            Message message = new MimeMessage(session);
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(addresses));
+            message.setSubject(topic);
+            message.setText(textMessage);
+            Transport.send(message);
+        } catch (MessagingException e) {
+            Logger.getLogger(CustomerResource.class.getName()).log(Level.ALL, "Cannot send mail", e);
+        }
+    }
 	
     @Transactional
 	public void saveCustomer(Customer customer) throws ValidationException {
@@ -91,12 +123,12 @@ public class CustomerService {
 		if(searchString == null || searchString.isEmpty()) {
 			queryString = "SELECT e FROM Customer e";
 		}else{
-			String[] searchParams = ServiceUtils.splitSearchString(searchString);
+			String[] searchParams = splitSearchString(searchString);
 			for(String s: searchParams) {
 				if(searchParams.length-1 == i) {
-					queryString += " e.firstName ='" + s + "' or e.lastName='" + s + "'";
+					queryString += " e.firstName ='" + s + "'";
 				}else{
-					queryString += " e.firstName ='" + s + "' or e.lastName='" + s + "' or";
+					queryString += " e.firstName ='" + s + "' or";
 				}
 				i++;
 			}
@@ -115,12 +147,10 @@ public class CustomerService {
 		for (String term : searchTerms) {
 			builder.or(qCustomer.firstName.contains(term));
 			builder.or(qCustomer.company.name.contains(term));
-			builder.or(qCustomer.surname.contains(term));
-			builder.or(qCustomer.email.contains(term));
+			builder.or(qCustomer.lastName.contains(term));
 		}
 		return query.from(qCustomer).where(builder).list(qCustomer);
 	}
-	
 
 	public void deleteCustomer(Long id) {
 		Customer customer = findCustomerById(id);
