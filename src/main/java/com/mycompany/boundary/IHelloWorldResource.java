@@ -1,7 +1,10 @@
 package com.mycompany.boundary;
 
+import java.net.URISyntaxException;
+
 import javax.ws.rs.Consumes;
 import javax.ws.rs.GET;
+import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
@@ -22,5 +25,14 @@ public interface IHelloWorldResource {
 	@GET
 	@Path("/{name}")
 	public abstract Response sayHello(@PathParam("name") String name, @QueryParam("nachname")String nachname);
+	
+	/**
+	 * Versenden der E-Mail über eine POST
+	 * @return
+	 * @throws URISyntaxException
+	 */
+	@POST
+	@Path("/sendmail")
+	Response sendMail() throws URISyntaxException;
 
 }
